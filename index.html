@@ -1,0 +1,4846 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Dashboard 4.0 - Final Complete</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- Favicon removed to fix 404 error -->
+
+    <style>
+        /* --- Base & Theming --- */
+        :root {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e4e6eb;
+            --text-primary: #1c1e21;
+            --text-secondary: #65676b;
+            --border-color: #ced0d4;
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --habit-grid-bg: #ebedf0;
+            --habit-done-0: #e0e0e0;
+            --habit-done-1: #9be9a8;
+            --habit-done-2: #40c463;
+            --habit-done-3: #30a14e;
+            --habit-done-4: #216e39;
+        }
+
+        body.dark-mode {
+            --bg-primary: #18191a;
+            --bg-secondary: #242526;
+            --bg-tertiary: #3a3b3c;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --border-color: #3e4042;
+            --primary-color: #2d88ff;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --habit-grid-bg: #161b22;
+            --habit-done-0: #2d333b;
+            --habit-done-1: #0e4429;
+            --habit-done-2: #006d32;
+            --habit-done-3: #26a641;
+            --habit-done-4: #39d353;
+        }
+
+        /* Custom Themes */
+        body.theme-green {
+            --primary-color: #28a745;
+        }
+
+        body.theme-purple {
+            --primary-color: #6f42c1;
+        }
+
+        body.theme-blue {
+            --primary-color: #2196f3;
+        }
+
+        body.theme-orange {
+            --primary-color: #ff9800;
+        }
+
+        body.theme-pink {
+            --primary-color: #e91e63;
+        }
+
+        body.theme-teal {
+            --primary-color: #009688;
+        }
+
+        body.theme-red {
+            --primary-color: #f44336;
+        }
+
+        body.dark-mode.theme-green {
+            --primary-color: #3ddc84;
+        }
+
+        body.dark-mode.theme-purple {
+            --primary-color: #a37acc;
+        }
+
+        body.dark-mode.theme-blue {
+            --primary-color: #90caf9;
+        }
+
+        body.dark-mode.theme-orange {
+            --primary-color: #ffb74d;
+        }
+
+        body.dark-mode.theme-pink {
+            --primary-color: #f06292;
+        }
+
+        body.dark-mode.theme-teal {
+            --primary-color: #4db6ac;
+        }
+
+        body.dark-mode.theme-red {
+            --primary-color: #ef9a9a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- Layout & Common --- */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 0.7rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px var(--shadow-color);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: color-mix(in srgb, var(--primary-color) 90%, #000);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .btn-full-width {
+            width: 100%;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* --- Pomodoro & Mood Tracker Specific Styles --- */
+        #pomodoro-timer {
+            text-align: center;
+        }
+
+        #pomodoro-time {
+            font-size: 6rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            color: var(--primary-color);
+        }
+
+        .mood-selector {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem 0;
+        }
+
+        .mood-option {
+            cursor: pointer;
+            font-size: 2.5rem;
+            transition: transform 0.2s;
+            opacity: 0.5;
+        }
+
+        .mood-option:hover {
+            transform: scale(1.2);
+        }
+
+        .mood-option.selected {
+            opacity: 1;
+            transform: scale(1.2);
+            filter: saturate(1.5);
+        }
+
+        /* --- Settings Theme Picker --- */
+        .theme-picker {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+        }
+
+        .theme-dot.active {
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+
+        .theme-dot[data-theme="default"] {
+            background-color: #007bff;
+        }
+
+        .theme-dot[data-theme="green"] {
+            background-color: #28a745;
+        }
+
+        .theme-dot[data-theme="purple"] {
+            background-color: #6f42c1;
+        }
+
+        .theme-dot[data-theme="blue"] {
+            background-color: #2196f3;
+        }
+
+        .theme-dot[data-theme="orange"] {
+            background-color: #ff9800;
+        }
+
+        .theme-dot[data-theme="pink"] {
+            background-color: #e91e63;
+        }
+
+        .theme-dot[data-theme="teal"] {
+            background-color: #009688;
+        }
+
+        .theme-dot[data-theme="red"] {
+            background-color: #f44336;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        input[type="text"],
+        input[type="search"],
+        input[type="date"],
+        input[type="time"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        input[type="range"] {
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .range-value {
+            margin-left: 10px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .chip-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .chip.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Spinner & Toast */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .spinner-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            border: 5px solid var(--bg-primary);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1.5px solid var(--primary-color);
+            border-left-width: 6px;
+            border-radius: 10px;
+            padding: 1.1rem 1.7rem;
+            box-shadow: 0 4px 16px var(--shadow-color);
+            min-width: 280px;
+            max-width: 400px;
+            font-size: 1.08rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            width: 100%;
+        }
+
+        .toast-content i {
+            font-size: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .toast span {
+            color: var(--text-primary);
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+        }
+
+        .toast-success {
+            border-left-color: var(--success-color);
+            background: linear-gradient(90deg, #e8f5e9 60%, #b9f6ca 100%);
+        }
+
+        .toast-success .toast-content i {
+            color: var(--success-color);
+        }
+
+        .toast-warning {
+            border-left-color: var(--warning-color);
+            background: linear-gradient(90deg, #fffde7 60%, #ffe082 100%);
+        }
+
+        .toast-warning .toast-content i {
+            color: var(--warning-color);
+        }
+
+        .toast-info {
+            border-left-color: var(--info-color);
+            background: linear-gradient(90deg, #e3f2fd 60%, #81d4fa 100%);
+        }
+
+        .toast-info .toast-content i {
+            color: var(--info-color);
+        }
+
+        .toast-error {
+            border-left-color: var(--danger-color);
+            background: linear-gradient(90deg, #ffebee 60%, #ef9a9a 100%);
+        }
+
+        .toast-error .toast-content i {
+            color: var(--danger-color);
+        }
+
+        body.dark-mode .toast {
+            background: #23272f;
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        body.dark-mode .toast span {
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+        }
+
+        body.dark-mode .toast-success {
+            background: linear-gradient(90deg, #1b2e1b 60%, #388e3c 100%);
+        }
+
+        body.dark-mode .toast-warning {
+            background: linear-gradient(90deg, #3a2f13 60%, #ffb300 100%);
+        }
+
+        body.dark-mode .toast-info {
+            background: linear-gradient(90deg, #1a2634 60%, #0288d1 100%);
+        }
+
+        body.dark-mode .toast-error {
+            background: linear-gradient(90deg, #3a2323 60%, #d32f2f 100%);
+        }
+
+        /* Header & Navigation */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .header-left h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .header-center {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            padding: 0 2rem;
+        }
+
+        .global-search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .global-search-wrapper .fa-search {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        #global-search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        #global-search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .app-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 0.75rem 1.2rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Empty State & Search Results */
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        #search-results-container ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #search-results-container li {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        #search-results-container li:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        #search-results-container li:last-child {
+            border-bottom: none;
+        }
+
+        #search-results-container h4 {
+            margin: 1rem 0 0.5rem;
+            padding: 0 0.75rem;
+        }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dashboard-widget li {
+            list-style: none;
+            padding: 0.75rem 0.25rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .dashboard-widget li:last-child {
+            border-bottom: none;
+        }
+
+        /* Report & Calendar */
+        .report-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        #calendar-container .vcal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        #calendar-container .vcal-header button {
+            background: var(--bg-tertiary);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+        }
+
+        #calendar-container .vcal-header span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        #calendar-container .vcal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        #calendar-container .vcal-day-name {
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding-bottom: 0.5rem;
+        }
+
+        #calendar-container .vcal-date {
+            padding: 10px 5px;
+            border-radius: 50%;
+            cursor: default;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        #calendar-container .vcal-date.other-month {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        #calendar-container .vcal-date.today {
+            background-color: color-mix(in srgb, var(--warning-color) 20%, transparent);
+            font-weight: bold;
+        }
+
+        #calendar-container .vcal-date.has-event {
+            background-color: color-mix(in srgb, var(--success-color) 40%, transparent);
+            cursor: pointer;
+        }
+
+        #calendar-container .vcal-date.has-event:hover {
+            background-color: color-mix(in srgb, var(--success-color) 60%, transparent);
+        }
+
+        /* TickTick Style Todo List */
+        .ticktick-todo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Quick Add Input */
+        .quick-add-container {
+            margin-bottom: 1rem;
+        }
+
+        .quick-add-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .quick-add-input-wrapper:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 16px color-mix(in srgb, var(--primary-color) 20%, transparent);
+            transform: translateY(-2px);
+        }
+
+        .quick-add-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+        }
+
+        .quick-add-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .quick-add-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .quick-add-btn:hover {
+            background: color-mix(in srgb, var(--primary-color) 90%, #000);
+            transform: scale(1.05);
+        }
+
+        .quick-add-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Advanced Add Section */
+        .advanced-add-section {
+            display: flex;
+            justify-content: center;
+        }
+
+        .advanced-add-btn {
+            background: transparent;
+            border: 2px dashed var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .advanced-add-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: color-mix(in srgb, var(--primary-color) 5%, transparent);
+        }
+
+        /* Advanced Add Form */
+        .advanced-add-form {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 16px var(--shadow-color);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .advanced-task-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .priority-select,
+        .due-date-input,
+        .due-time-input {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            min-width: 120px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* Todo Controls */
+        .todo-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select,
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        /* Task List */
+        .task-list-container {
+            min-height: 200px;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .task-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-color);
+            border-color: var(--primary-color);
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            background: color-mix(in srgb, var(--success-color) 5%, var(--bg-secondary));
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .task-checkbox.checked {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .task-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .task-text {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .task-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .task-priority-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .task-priority-indicator.low {
+            background: var(--success-color);
+        }
+
+        .task-priority-indicator.medium {
+            background: var(--warning-color);
+        }
+
+        .task-priority-indicator.high {
+            background: var(--danger-color);
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .task-item:hover .task-actions {
+            opacity: 1;
+        }
+
+        .task-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .task-action-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+
+        .task-action-btn.delete:hover {
+            color: var(--danger-color);
+        }
+
+        /* Todo Statistics */
+        .todo-stats {
+            display: flex;
+            justify-content: space-around;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .todo-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .task-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .task-actions {
+                align-self: flex-end;
+                opacity: 1;
+            }
+
+            .todo-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 16px var(--shadow-color);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toast-content i {
+            font-size: 1.2rem;
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast-success .toast-content i {
+            color: var(--success-color);
+        }
+
+        .toast-warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .toast-warning .toast-content i {
+            color: var(--warning-color);
+        }
+
+        .toast-info {
+            border-left: 4px solid var(--info-color);
+        }
+
+        .toast-info .toast-content i {
+            color: var(--info-color);
+        }
+
+        /* Dashboard Todo Widget */
+        .dashboard-todo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .dashboard-quick-add {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+
+        .dashboard-task-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .dashboard-task-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .dashboard-add-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .dashboard-add-btn:hover {
+            background: color-mix(in srgb, var(--primary-color) 90%, #000);
+            transform: scale(1.05);
+        }
+
+        .dashboard-task-list {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .dashboard-task-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-task-item:hover {
+            border-color: var(--primary-color);
+        }
+
+        .dashboard-task-item.completed {
+            opacity: 0.6;
+        }
+
+        .dashboard-task-item.completed .dashboard-task-text {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .dashboard-task-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .dashboard-task-checkbox.checked {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .dashboard-task-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .dashboard-todo-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .dashboard-todo-count {
+            color: var(--text-secondary);
+        }
+
+        .dashboard-todo-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .dashboard-todo-link:hover {
+            color: color-mix(in srgb, var(--primary-color) 80%, #000);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dashboard-widget {
+            min-height: 200px;
+        }
+
+        /* Notes */
+        #notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .note-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            box-shadow: 0 1px 3px var(--shadow-color);
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .note-card.pinned {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .note-pin-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 10;
+        }
+
+        .note-pin-btn .fa-thumbtack {
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .note-card.pinned .note-pin-btn .fa-thumbtack {
+            color: var(--warning-color);
+            transform: rotate(45deg);
+        }
+
+        .note-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .note-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            padding-right: 25px;
+        }
+
+        .note-card-body {
+            flex-grow: 1;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .note-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .note-card-category {
+            font-size: 0.8rem;
+            background-color: var(--bg-tertiary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            align-self: flex-start;
+        }
+
+        .note-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+
+        .note-tag {
+            font-size: 0.75rem;
+            background-color: var(--info-color);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .notes-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-manager {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Habit Tracker */
+        #habit-tracker-container {
+            overflow-x: auto;
+            padding: 0.5rem;
+        }
+
+        .habit-tracker-grid {
+            display: grid;
+            grid-template-columns: 200px repeat(31, 1fr);
+            gap: 4px;
+            align-items: center;
+            min-width: 1000px;
+        }
+
+        .habit-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 10px;
+            text-align: right;
+        }
+
+        .habit-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .habit-streak {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--success-color);
+            background: color-mix(in srgb, var(--success-color) 20%, transparent);
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .habit-day-header {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .habit-day {
+            width: 25px;
+            height: 25px;
+            background-color: var(--habit-grid-bg);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .habit-day.done {
+            background-color: var(--habit-done-3);
+        }
+
+        /* Goal Setting */
+        .goal-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .goal-progress-container {
+            margin-top: 0.5rem;
+        }
+
+        .goal-progress {
+            width: 100%;
+            height: 8px;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .goal-progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--success-color);
+            border-radius: 8px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .goal-progress-text {
+            font-size: 0.8rem;
+            text-align: right;
+            color: var(--text-secondary);
+        }
+
+        .goal-linked-tasks {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+        }
+
+        .goal-linked-tasks li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .goal-linked-tasks li.completed {
+            text-decoration: line-through;
+        }
+
+        /* Analytics */
+        #analytics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        /* Settings */
+        #settings .card {
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        #note-timestamps {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        #note-editor {
+            height: 250px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .ql-toolbar,
+        .ql-container {
+            border-color: var(--border-color) !important;
+        }
+
+        .ql-snow .ql-stroke {
+            stroke: var(--text-secondary);
+        }
+
+        .ql-snow .ql-fill {
+            fill: var(--text-secondary);
+        }
+
+        .ql-editor {
+            color: var(--text-primary);
+        }
+
+        #category-list-manage li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #report-view-content {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .report-container {
+                grid-template-columns: 1fr;
+            }
+
+            .report-history {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-center {
+                order: 2;
+                width: 100%;
+                padding: 0;
+            }
+
+            .header-left {
+                order: 1;
+            }
+
+            .header-right {
+                order: 3;
+            }
+
+            .app-nav {
+                justify-content: space-around;
+            }
+
+            .nav-tab {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .task-input-meta {
+                flex-direction: column;
+            }
+
+            .task-input-meta .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .notes-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #analytics-container {
+                grid-template-columns: 1fr;
+            }
+
+            #pomodoro-time {
+                font-size: 4rem;
+            }
+        }
+
+        .theme-switch.lang-switch {
+            width: 50px;
+            height: 26px;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .theme-switch.lang-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-switch.lang-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 26px;
+        }
+
+        .theme-switch.lang-switch .slider:before {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .theme-switch.lang-switch input:checked+.slider {
+            background-color: var(--primary-color);
+        }
+
+        .theme-switch.lang-switch input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .theme-switch.lang-switch .lang-label {
+            position: absolute;
+            top: 3px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            pointer-events: none;
+            z-index: 2;
+            transition: color 0.3s;
+        }
+
+        .theme-switch.lang-switch .lang-bn {
+            left: 10px;
+        }
+
+        .theme-switch.lang-switch .lang-en {
+            right: 10px;
+        }
+
+        .theme-switch.lang-switch input:checked~.lang-bn {
+            color: #fff;
+            opacity: 0.7;
+        }
+
+        .theme-switch.lang-switch input:not(:checked)~.lang-en {
+            color: #fff;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .form-group[style*="display: flex"] {
+                flex-direction: column;
+                gap: 1.2rem !important;
+                align-items: flex-start !important;
+            }
+        }
+
+        [data-i18n] {
+            transition: opacity 0.12s;
+        }
+
+        [data-i18n].lang-fade {
+            opacity: 0.2;
+        }
+
+        /* --- Analytics Section --- */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .chart-card {
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            box-shadow: 0 4px 16px var(--shadow-color);
+            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-height: 180px;
+            transition: background 0.3s, color 0.3s;
+            border: 1.5px solid var(--border-color);
+        }
+
+        .chart-card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+            opacity: 0.85;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        body.dark-mode .chart-card {
+            background: #23272f;
+            border-color: #33374a;
+        }
+
+        body.dark-mode .chart-placeholder {
+            background: #181b22;
+            color: #b0b3b8;
+            border-color: #3e4042;
+        }
+
+        .analytics-filter-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            gap: 1rem;
+        }
+
+        .analytics-filter-bar select {
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .analytics-filter-bar select:focus {
+            border-color: var(--primary-color);
+        }
+
+        .chart-card {
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .chart-card:hover {
+            box-shadow: 0 8px 32px var(--shadow-color);
+            transform: translateY(-4px) scale(1.02);
+            border-color: var(--primary-color);
+        }
+
+        /* Compact List Styles for Notes & Tasks */
+        .compact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0;
+            margin: 0;
+        }
+
+        .compact-list-item {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            min-height: 44px;
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+
+        .compact-list-item:hover {
+            background: var(--bg-tertiary);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .compact-list-item .item-title {
+            flex: 1;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .compact-list-item .item-meta {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-left: 0.7em;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            .compact-list-item {
+                font-size: 0.97rem;
+                padding: 0.6rem 0.7rem;
+                min-height: 38px;
+            }
+        }
+
+        .compact-list-item {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            padding: 0.4rem 0.7rem;
+            font-size: 0.97rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            min-height: 32px;
+            box-shadow: 0 1px 2px var(--shadow-color);
+            gap: 0.3rem;
+        }
+
+        .compact-list-item .item-title {
+            flex: 1;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .compact-list-item .item-meta {
+            font-size: 0.82em;
+            color: var(--text-secondary);
+            margin-left: 0.5em;
+            white-space: nowrap;
+        }
+
+        /* Stats Box Compact */
+        .todo-stats-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .todo-stats-box {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.5rem 0 0.3rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            min-height: 48px;
+            box-shadow: 0 1px 2px var(--shadow-color);
+        }
+
+        .todo-stats-box .stats-number {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.1rem;
+        }
+
+        .todo-stats-box .stats-label {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .compact-list-item {
+                font-size: 0.93rem;
+                padding: 0.32rem 0.5rem;
+                min-height: 28px;
+            }
+
+            .todo-stats-box {
+                min-width: 48px;
+                min-height: 38px;
+                padding: 0.3rem 0 0.2rem 0;
+            }
+
+            .todo-stats-box .stats-number {
+                font-size: 1.1rem;
+            }
+
+            .todo-stats-box .stats-label {
+                font-size: 0.82rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading-spinner" class="spinner-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="main-container">
+        <header class="app-header" style="position:relative;">
+            <div class="header-left">
+                <h1 id="dashboard-title" style="cursor:pointer;">Dashboard 4.0</h1>
+            </div>
+            <div class="header-center">
+                <div class="global-search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="search" id="global-search-input" placeholder="নোট এবং কাজে খুঁজুন..."
+                        autocomplete="off">
+                </div>
+            </div>
+            <div class="header-right">
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </header>
+
+        <div id="search-results-container"></div>
+
+        <main class="app-main">
+            <nav class="app-nav">
+                <button class="nav-tab active" data-tab="dashboard" data-i18n="dashboard"><i class="fas fa-home"></i>
+                    ড্যাশবোর্ড</button>
+                <button class="nav-tab" data-tab="goals" data-i18n="goals"><i class="fas fa-bullseye"></i>
+                    লক্ষ্য</button>
+                <button class="nav-tab" data-tab="pomodoro" data-i18n="pomodoro"><i class="fas fa-clock"></i>
+                    পোমোডোরো</button>
+                <button class="nav-tab" data-tab="report" data-i18n="accountability"><i
+                        class="fas fa-calendar-check"></i> দায়িত্ব</button>
+                <button class="nav-tab" data-tab="todos" data-i18n="todos"><i class="fas fa-tasks"></i>
+                    টু-ডু লিস্ট</button>
+                <button class="nav-tab" data-tab="notes" data-i18n="notes"><i class="fas fa-sticky-note"></i>
+                    নোটস</button>
+                <button class="nav-tab" data-tab="habits" data-i18n="habits"><i class="fas fa-chart-line"></i>
+                    অভ্যাস</button>
+                <button class="nav-tab" data-tab="settings" data-i18n="settings"><i class="fas fa-cog"></i>
+                    সেটিংস</button>
+                <button class="nav-tab" data-tab="analytics" data-i18n="analytics"><i class="fas fa-chart-pie"></i>
+                    বিশ্লেষণ</button>
+            </nav>
+
+            <div id="dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="card dashboard-widget">
+                        <h2><i class="fas fa-bullseye"></i> চলমান লক্ষ্য</h2>
+                        <div id="dashboard-goals"></div>
+                    </div>
+                    <div class="card dashboard-widget">
+                        <h2><i class="fas fa-tasks"></i> আজকের কাজ</h2>
+                        <ul id="dashboard-task-list" class="compact-list"></ul>
+                        <div class="dashboard-todo-footer">
+                            <span id="dashboard-todo-count">0টি কাজ</span>
+                            <a href="#" onclick="switchToTab('todos')" class="dashboard-todo-link">সব দেখুন</a>
+                        </div>
+                    </div>
+                    <div class="card dashboard-widget">
+                        <h2><i class="fas fa-book-open"></i> সাম্প্রতিক নোট</h2>
+                        <ul id="dashboard-notes-list" class="compact-list"></ul>
+                    </div>
+                    <div class="card dashboard-widget">
+                        <h2><i class="fas fa-chart-line"></i> অভ্যাস ট্র্যাকার</h2>
+                        <div id="dashboard-habits"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="goals" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-bullseye"></i> আপনার লক্ষ্যসমূহ</h2>
+                    <p>বড় লক্ষ্য নির্ধারণ করুন এবং সেগুলোর সাথে সম্পর্কিত কাজগুলো সম্পন্ন করে অগ্রগতি ট্র্যাক করুন।</p>
+                    <button id="add-goal-btn" class="btn btn-primary" style="margin-top: 1rem;"><i
+                            class="fas fa-plus"></i> নতুন লক্ষ্য যোগ করুন</button>
+                </div>
+                <div id="goals-grid" class="grid-container"></div>
+            </div>
+
+            <div id="pomodoro" class="tab-content">
+                <div class="card" id="pomodoro-timer">
+                    <h2><i class="fas fa-brain"></i> ফোকাস সেশন</h2>
+                    <div id="pomodoro-time">25:00</div>
+                    <div class="button-group" style="justify-content: center; margin-top: 1rem;">
+                        <button id="pomodoro-start" class="btn btn-primary"><i class="fas fa-play"></i> শুরু
+                            করুন</button>
+                        <button id="pomodoro-pause" class="btn btn-secondary" style="display: none;"><i
+                                class="fas fa-pause"></i> পজ</button>
+                        <button id="pomodoro-reset" class="btn btn-danger"><i class="fas fa-redo"></i> রিসেট</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="report" class="tab-content">
+                <div class="report-container">
+                    <div id="report-form-container">
+                        <form id="report-form">
+                            <section class="card">
+                                <h2><i class="fas fa-smile-beam"></i> আজকের মুড কেমন?</h2>
+                                <div class="mood-selector">
+                                    <span class="mood-option" data-mood="happy" title="খুশি">😊</span>
+                                    <span class="mood-option" data-mood="calm" title="শান্ত">😌</span>
+                                    <span class="mood-option" data-mood="sad" title="দুঃখিত">😔</span>
+                                    <span class="mood-option" data-mood="angry" title="রাগান্বিত">😠</span>
+                                    <span class="mood-option" data-mood="productive" title="প্রোডাক্টিভ">🚀</span>
+                                </div>
+                            </section>
+                            <section class="card">
+                                <h2><i class="fas fa-tasks"></i> সাধারণ চেকলিস্ট</h2>
+                                <div class="form-group"><label>পর্ণ দেখেছি কি না?</label><select name="porn_check">
+                                        <option>না</option>
+                                        <option>হ্যাঁ</option>
+                                    </select></div>
+                                <div class="form-group"><label>মাস্টারবেশন করেছি কি না?</label><select
+                                        name="masturbation_check">
+                                        <option>না</option>
+                                        <option>হ্যাঁ</option>
+                                    </select></div>
+                            </section>
+                            <section class="card">
+                                <h2><i class="fas fa-book"></i> পড়াশোনা ও দক্ষতা</h2>
+                                <div class="form-group"><label for="study-hours">আজ পড়াশোনা কত ঘণ্টা
+                                        করেছি?</label><input type="text" id="study-hours" name="study_hours"
+                                        placeholder="ঘণ্টা লিখুন"></div>
+                                <div class="form-group"><label for="civil-learn">সিভিল কি শিখেছি আজ?</label><textarea
+                                        id="civil-learn" name="civil_learn" rows="3"></textarea></div>
+                                <div class="form-group"><label for="govt-study">সরকারি পড়া থেকে কী
+                                        করলাম?</label><textarea id="govt-study" name="govt_study" rows="3"></textarea>
+                                </div>
+                                <div class="form-group"><label for="autocad-drawing">অটোক্যাড/ড্রইং</label><textarea
+                                        id="autocad-drawing" name="autocad_drawing" rows="3"></textarea></div>
+                            </section>
+                            <section class="card">
+                                <h2><i class="fas fa-feather-alt"></i> জার্নাল</h2>
+                                <div class="form-group"><label for="feeling-today">নিজেকে কেমন লাগছে
+                                        আজ?</label><textarea id="feeling-today" name="feeling_today"
+                                        rows="3"></textarea></div>
+                                <div class="form-group"><label for="today-thoughts">আজকের ভাবনা</label><textarea
+                                        id="today-thoughts" name="today_thoughts" rows="3"></textarea></div>
+                                <div class="form-group"><label for="today-goal">আজকের লক্ষ্য ছিল</label><textarea
+                                        id="today-goal" name="today_goal" rows="3"></textarea></div>
+                                <div class="form-group"><label for="goal-completion">আমি এটা কতটুকু পূরণ
+                                        করেছি?</label><textarea id="goal-completion" name="goal_completion"
+                                        rows="3"></textarea></div>
+                                <div class="form-group"><label for="self-teaching">আজকে আমি নিজেকে কী
+                                        শিখালাম?</label><textarea id="self-teaching" name="self_teaching"
+                                        rows="3"></textarea></div>
+                                <div class="form-group"><label for="prayer">আজ আমি আল্লাহর কাছে কী
+                                        চাইলাম?</label><textarea id="prayer" name="prayer" rows="3"></textarea></div>
+                            </section>
+                            <section class="card">
+                                <h2><i class="fas fa-brain"></i> Quiz/Reflection</h2>
+                                <div class="form-group"><label>আজকের ফোকাস কেমন ছিল?</label>
+                                    <div class="chip-group" data-name="focus_level"><button type="button" class="chip"
+                                            data-value="দুর্বল">দুর্বল</button><button type="button" class="chip"
+                                            data-value="মাঝারি">মাঝারি</button><button type="button" class="chip"
+                                            data-value="দুর্দান্ত">দুর্দান্ত</button></div>
+                                </div>
+                                <div class="form-group"><label for="self-control-level">কতটা আত্মনিয়ন্ত্রণ রাখতে পেরেছি?
+                                        (১-১০)</label><input type="range" id="self-control-level"
+                                        name="self_control_level" min="1" max="10" value="5"
+                                        oninput="this.nextElementSibling.textContent = this.value"><span
+                                        class="range-value">5</span></div>
+                            </section>
+                            <div class="button-group"><button type="submit" class="btn btn-primary"><i
+                                        class="fas fa-save"></i> রিপোর্ট সেভ করুন</button></div>
+                        </form>
+                    </div>
+                    <div class="report-history card">
+                        <h2><i class="fas fa-history"></i> রিপোর্ট ক্যালেন্ডার</h2>
+                        <p>যেকোনো তারিখে ক্লিক করে সেদিনের রিপোর্ট দেখুন।</p>
+                        <div id="calendar-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="todos" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-tasks"></i> টু-ডু লিস্ট</h2>
+                    <p>TickTick স্টাইলের আধুনিক টু-ডু লিস্ট। দ্রুত কাজ যোগ করুন, অগ্রাধিকার নির্ধারণ করুন এবং আপনার
+                        কাজগুলো ট্র্যাক করুন।</p>
+                </div>
+                <div class="card">
+                    <div class="ticktick-todo-container">
+                        <!-- Quick Add Input -->
+                        <div class="quick-add-container">
+                            <div class="quick-add-input-wrapper">
+                                <input type="text" id="quick-task-input" placeholder="কাজ যোগ করুন..."
+                                    class="quick-add-input">
+                                <button id="quick-add-btn" class="quick-add-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Add Button -->
+                        <div class="advanced-add-section">
+                            <button id="advanced-add-btn" class="advanced-add-btn">
+                                <i class="fas fa-plus"></i> বিস্তারিত যোগ করুন
+                            </button>
+                        </div>
+
+                        <!-- Advanced Add Form (Hidden by default) -->
+                        <div id="advanced-add-form" class="advanced-add-form" style="display: none;">
+                            <div class="form-row">
+                                <input type="text" id="advanced-task-input" placeholder="কাজের বিবরণ..."
+                                    class="advanced-task-input">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="task-priority">অগ্রাধিকার</label>
+                                    <select id="task-priority" class="priority-select">
+                                        <option value="low">কম</option>
+                                        <option value="medium" selected>মাঝারি</option>
+                                        <option value="high">উচ্চ</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="task-due-date">শেষ তারিখ</label>
+                                    <input type="date" id="task-due-date" class="due-date-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="task-due-time">সময়</label>
+                                    <input type="time" id="task-due-time" class="due-time-input">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" id="cancel-advanced-btn" class="btn btn-secondary">বাতিল</button>
+                                <button type="button" id="save-advanced-btn" class="btn btn-primary">সংরক্ষণ</button>
+                            </div>
+                        </div>
+
+                        <!-- Filters and Sort -->
+                        <div class="todo-controls">
+                            <div class="filter-section">
+                                <select id="task-filter" class="filter-select">
+                                    <option value="all">সব কাজ</option>
+                                    <option value="pending">অসম্পূর্ণ</option>
+                                    <option value="completed">সম্পূর্ণ</option>
+                                </select>
+                            </div>
+                            <div class="sort-section">
+                                <select id="task-sort" class="sort-select">
+                                    <option value="created">তৈরির তারিখ</option>
+                                    <option value="due">শেষ তারিখ</option>
+                                    <option value="priority">অগ্রাধিকার</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Task List -->
+                        <div class="task-list-container">
+                            <ul id="task-list" class="compact-list"></ul>
+                        </div>
+                        <!-- Task Detail Modal -->
+                        <div id="task-modal" class="modal">
+                            <div class="modal-content"><span class="close-btn" id="close-task-modal">&times;</span>
+                                <h2 id="task-modal-title"></h2>
+                                <div id="task-modal-body"></div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" id="edit-task-btn">সম্পাদনা</button>
+                                    <button class="btn btn-danger" id="delete-task-btn">ডিলিট</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Statistics -->
+                        <div class="todo-stats-container">
+                            <div class="todo-stats-box">
+                                <div class="stats-number" id="total-tasks">0</div>
+                                <div class="stats-label">মোট কাজ</div>
+                            </div>
+                            <div class="todo-stats-box">
+                                <div class="stats-number" id="completed-tasks">0</div>
+                                <div class="stats-label">সম্পূর্ণ</div>
+                            </div>
+                            <div class="todo-stats-box">
+                                <div class="stats-number" id="pending-tasks">0</div>
+                                <div class="stats-label">অসম্পূর্ণ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notes" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-lightbulb"></i> Notes (নোটস)</h2>
+                    <div class="notes-controls">
+                        <div class="category-manager">
+                            <input type="text" id="category-input" placeholder="নতুন ক্যাটাগরি...">
+                            <button id="add-category-btn" class="btn btn-secondary">Add</button>
+                            <button id="manage-categories-btn" class="btn"><i class="fas fa-cog"></i> Manage</button>
+                        </div>
+                        <select id="category-filter">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+                    <button id="add-note-btn" class="btn btn-primary btn-full-width" style="margin-top:1rem;"><i
+                            class="fas fa-plus"></i> নতুন নোট তৈরি করুন (Cmd+M)</button>
+                </div>
+                <ul id="notes-list" class="compact-list"></ul>
+            </div>
+
+            <div id="habits" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-chart-line"></i> অভ্যাস ট্র্যাকার</h2>
+                    <p>আপনার দৈনন্দিন অভ্যাস ট্র্যাক করুন। অভ্যাস যোগ করুন এবং প্রতিদিন সেটি পূরণ হলে দিনের বক্সে ক্লিক
+                        করুন।</p>
+                    <form id="add-habit-form" style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <input type="text" id="habit-input" placeholder="নতুন অভ্যাস যোগ করুন, যেমন: 'বই পড়া'" required
+                            style="flex-grow: 1;">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> যোগ করুন</button>
+                    </form>
+                </div>
+                <div class="card" id="habit-tracker-container"></div>
+            </div>
+
+            <div id="settings" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-cog"></i> সেটিংস</h2>
+                    <div class="form-group" style="margin-top: 2rem; display: flex; align-items: center; gap: 2rem;">
+                        <div>
+                            <h4><i class="fas fa-language"></i> ভাষা</h4>
+                            <label class="theme-switch lang-switch">
+                                <input type="checkbox" id="language-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <h4><i class="fas fa-database"></i> ডেটা ম্যানেজমেন্ট</h4>
+                        <p>আপনার সকল ডেটা একটি JSON ফাইলে ব্যাকআপ নিন বা পুনরুদ্ধার করুন।</p>
+                        <div class="button-group" style="justify-content: flex-start;">
+                            <button id="export-data-btn" class="btn btn-primary custom-action-btn"><i
+                                    class="fas fa-download"></i> এক্সপোর্ট করুন</button>
+                            <button id="import-data-btn" class="btn btn-primary custom-action-btn"><i
+                                    class="fas fa-upload"></i> ইমপোর্ট করুন</button>
+                            <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <h4><i class="fas fa-bell"></i> নোটিফিকেশন পারমিশন</h4>
+                        <p>কাজের রিমাইন্ডার পেতে ব্রাউজার নোটিফিকেশন চালু করুন।</p>
+                        <button id="request-notification-permission" class="btn btn-primary custom-action-btn"><i
+                                class="fas fa-bell"></i> অনুমতি দিন</button>
+                    </div>
+                    <!-- Settings-এর card-এর একদম উপরে Theme Picker UI নিয়ে আসা হলো -->
+                    <div class="form-group" style="margin-bottom: 2rem;">
+                        <h4><i class="fas fa-palette"></i> থিম পরিবর্তন করুন</h4>
+                        <div class="theme-picker">
+                            <span class="theme-dot" data-theme="default" title="নীল"></span>
+                            <span class="theme-dot" data-theme="green" title="সবুজ"></span>
+                            <span class="theme-dot" data-theme="purple" title="বেগুনি"></span>
+                            <span class="theme-dot" data-theme="blue" title="আকাশি"></span>
+                            <span class="theme-dot" data-theme="orange" title="কমলা"></span>
+                            <span class="theme-dot" data-theme="pink" title="গোলাপি"></span>
+                            <span class="theme-dot" data-theme="teal" title="সবুজ-নীল"></span>
+                            <span class="theme-dot" data-theme="red" title="লাল"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analytics" class="tab-content">
+                <div class="card">
+                    <h2><i class="fas fa-chart-pie"></i> অ্যানালাইটিক্স</h2>
+                    <p>আপনার রিপোর্ট থেকে পাওয়া ডেটার গ্রাফিক্যাল ভিউ।</p>
+                </div>
+                <div class="analytics-grid">
+                    <div class="card chart-card">
+                        <h3><i class="fas fa-tasks"></i> টাস্ক কমপ্লিশন রেট</h3>
+                        <canvas id="task-completion-chart" height="120"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3><i class="fas fa-book-reader"></i> পড়াশোনার সময় (ঘণ্টা)</h3>
+                        <canvas id="study-hours-chart" height="120"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3><i class="fas fa-brain"></i> ফোকাস লেভেল</h3>
+                        <canvas id="focus-level-chart" height="120"></canvas>
+                    </div>
+                    <div class="card chart-card">
+                        <h3><i class="fas fa-smile"></i> মুড ডিস্ট্রিবিউশন</h3>
+                        <canvas id="mood-chart" height="120"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="goal-modal" class="modal">
+        <div class="modal-content"><span class="close-btn">&times;</span>
+            <h2><i class="fas fa-bullseye"></i> লক্ষ্য</h2>
+            <form id="goal-form"><input type="hidden" id="goal-id-input">
+                <div class="form-group"><label for="goal-title-input">লক্ষ্যের শিরোনাম</label><input type="text"
+                        id="goal-title-input" required></div>
+                <div class="form-group"><label for="goal-tasks-select">এই লক্ষ্যের সাথে সম্পর্কিত কাজ
+                        (Tasks)</label><select id="goal-tasks-select" multiple style="height: 150px;"></select></div>
+                <div class="button-group"><button type="button" id="delete-goal-btn" class="btn btn-danger"
+                        style="display:none; margin-right: auto;">ডিলিট</button><button type="submit"
+                        class="btn btn-primary">সেভ</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="note-modal" class="modal">
+        <div class="modal-content"><span class="close-btn">&times;</span>
+            <form id="note-form"><input type="hidden" id="note-id-input">
+                <div class="form-group"><select id="note-category-select"></select></div>
+                <div class="form-group"><input type="text" id="note-title-input" placeholder="নোটের শিরোনাম..."></div>
+                <div class="form-group">
+                    <div id="note-editor"></div>
+                </div>
+                <div id="note-tags-input-container" class="form-group"><label>ট্যাগ (কমা দিয়ে আলাদা করুন)</label><input
+                        type="text" id="note-tags-input"></div>
+            </form>
+            <div class="modal-footer">
+                <div id="note-timestamps"></div>
+                <div class="button-group"><button id="delete-note-btn" class="btn btn-danger">Delete</button><button
+                        id="save-note-btn" class="btn btn-primary">Save</button></div>
+            </div>
+        </div>
+    </div>
+    <div id="category-manage-modal" class="modal">
+        <div class="modal-content"><span class="close-btn">&times;</span>
+            <h2>Manage Categories</h2>
+            <ul id="category-list-manage"></ul>
+        </div>
+    </div>
+    <div id="report-view-modal" class="modal">
+        <div class="modal-content"><span class="close-btn">&times;</span>
+            <h2 id="report-view-date"></h2>
+            <div id="report-view-content"></div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <!-- <script src="app.js"></script> -->
+
+    <script>
+        // FINAL, COMPLETE & DEBUGGED JAVASCRIPT WITH ALL FEATURES
+        document.addEventListener('DOMContentLoaded', async () => {
+
+            const DB_VERSION = 6; // Incremented for new mood data
+            const db = {
+                _dbInstance: null,
+                init: function () {
+                    return new Promise((resolve, reject) => {
+                        if (this._dbInstance) return resolve(this._dbInstance);
+                        const request = indexedDB.open('PersonalDashboardDB_v6', DB_VERSION);
+                        request.onerror = (e) => reject("Database error: " + e.target.error.message);
+
+                        request.onupgradeneeded = (e) => {
+                            const db = e.target.result;
+                            const transaction = e.target.transaction;
+
+                            if (!db.objectStoreNames.contains('tasks')) db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+                            if (!db.objectStoreNames.contains('categories')) db.createObjectStore('categories', { keyPath: 'id', autoIncrement: true });
+                            if (!db.objectStoreNames.contains('dailyReports')) db.createObjectStore('dailyReports', { keyPath: 'date' });
+                            if (!db.objectStoreNames.contains('habits')) db.createObjectStore('habits', { keyPath: 'id', autoIncrement: true });
+
+                            if (!db.objectStoreNames.contains('notes')) {
+                                const notesStore = db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });
+                                notesStore.createIndex('categoryId', 'categoryId', { unique: false });
+                                notesStore.createIndex('pinned_updatedAt', ['pinned', 'updatedAt'], { unique: false });
+                            } else {
+                                const notesStore = transaction.objectStore('notes');
+                                if (!notesStore.indexNames.contains('pinned_updatedAt')) {
+                                    notesStore.createIndex('pinned_updatedAt', ['pinned', 'updatedAt'], { unique: false });
+                                }
+                            }
+
+                            if (!db.objectStoreNames.contains('habit_entries')) {
+                                const habitEntryStore = db.createObjectStore('habit_entries', { keyPath: 'id', autoIncrement: true });
+                                habitEntryStore.createIndex('habitId_date', ['habitId', 'date'], { unique: true });
+                            }
+
+                            if (!db.objectStoreNames.contains('subtasks')) {
+                                const subtaskStore = db.createObjectStore('subtasks', { keyPath: 'id', autoIncrement: true });
+                                subtaskStore.createIndex('taskId', 'taskId', { unique: false });
+                            }
+                            if (!db.objectStoreNames.contains('goals')) {
+                                db.createObjectStore('goals', { keyPath: 'id', autoIncrement: true });
+                            }
+                        };
+
+                        request.onsuccess = (e) => {
+                            this._dbInstance = e.target.result;
+                            resolve(this._dbInstance);
+                        };
+                    });
+                },
+                _getTransaction: (store, mode = 'readonly') => db._dbInstance.transaction(store, mode).objectStore(store),
+                addData: (store, data) => new Promise((res, rej) => { const req = db._getTransaction(store, 'readwrite').add(data); req.onsuccess = () => res(req.result); req.onerror = (e) => rej(e.target.error); }),
+                putData: (store, data) => new Promise((res, rej) => { const req = db._getTransaction(store, 'readwrite').put(data); req.onsuccess = () => res(req.result); req.onerror = (e) => rej(e.target.error); }),
+                getAllData: (store) => new Promise((res, rej) => { const req = db._getTransaction(store).getAll(); req.onsuccess = () => res(req.result); req.onerror = (e) => rej(e.target.error); }),
+                getData: (store, key) => new Promise((res, rej) => { const req = db._getTransaction(store).get(key); req.onsuccess = () => res(req.result); req.onerror = (e) => rej(e.target.error); }),
+                deleteData: (store, id) => new Promise((res, rej) => { const req = db._getTransaction(store, 'readwrite').delete(id); req.onsuccess = () => res(); req.onerror = (e) => rej(e.target.error); }),
+                getDataByIndex: (storeName, indexName, query) => new Promise((res, rej) => {
+                    const store = db._getTransaction(storeName);
+                    const index = store.index(indexName);
+                    const req = index.getAll(query);
+                    req.onsuccess = () => res(req.result);
+                    req.onerror = e => rej(e.target.error);
+                }),
+                getHabitEntry: (habitId, date) => new Promise((res, rej) => {
+                    const store = db._getTransaction('habit_entries');
+                    const index = store.index('habitId_date');
+                    const req = index.get([habitId, date]);
+                    req.onsuccess = () => res(req.result);
+                    req.onerror = e => rej(e.target.error);
+                }),
+                clearStore: (storeName) => new Promise((res, rej) => {
+                    const tx = db._dbInstance.transaction(storeName, 'readwrite');
+                    const store = tx.objectStore(storeName);
+                    const req = store.clear();
+                    req.onsuccess = () => res();
+                    req.onerror = (e) => rej(e.target.error);
+                }),
+            };
+
+            const showSpinner = () => document.getElementById('loading-spinner').classList.add('show');
+            const hideSpinner = () => document.getElementById('loading-spinner').classList.remove('show');
+            function showToast(message, type = 'success') {
+                if (!message || !message.trim()) return; // ফাঁকা হলে কিছুই দেখাবেন না
+                const toastContainer = document.getElementById('toast-container');
+                if (!toastContainer) return;
+
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    <div class="toast-content">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+
+                toastContainer.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+            function debounce(func, delay) {
+                let timeout;
+                return function (...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+
+            const emptyTasksSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22 7.5a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h18a1 1 0 0 0 1-1Zm-1 4a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h17a1 1 0 0 0 1-1Zm-1 4a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h17a1 1 0 0 0 1-1Z"/></svg><p>সব কাজ সম্পন্ন! নতুন কাজ যোগ করুন।</p>`;
+            const emptyNotesSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14.59 2.59c-.38-.38-.89-.59-1.42-.59H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8c0-.53-.21-1.04-.59-1.41l-4.82-4.82ZM14 4.41L17.59 8H14V4.41ZM19 20H5V4h7v5h5v11Z"/></svg><p>কোনো নোট পাওয়া যায়নি।</p>`;
+            const emptyHabitsSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21 4H3C2.45 4 2 4.45 2 5V19C2 19.55 2.45 20 3 20H21C21.55 20 22 19.55 22 19V5C22 4.45 21.55 4 21 4ZM20 18H4V6H20V18ZM10.5 17L6.5 13L7.91 11.59L10.5 14.17L16.09 8.59L17.5 10L10.5 17Z"/></svg><p>কোনো অভ্যাস যোগ করা হয়নি।</p>`;
+            const emptyAnalyticsSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22 2H2v20h20V2ZM9 17H7v-5h2v5Zm4 0h-2v-8h2v8Zm4 0h-2V7h2v10Z"/></svg><p>চার্ট দেখানোর জন্য পর্যাপ্ত ডেটা নেই।</p>`;
+            const emptyGoalsSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg><p>কোনো লক্ষ্য যোগ করা হয়নি।</p>`;
+
+            let calendarDate = new Date();
+            let quill;
+            let activeCharts = {};
+
+            async function initializeApp() {
+                showSpinner();
+                await db.init();
+                setupEventListeners();
+
+                applyTheme(localStorage.getItem('appTheme') || 'default');
+
+                const initialTab = document.querySelector('.nav-tab.active')?.dataset.tab || 'dashboard';
+                await switchTab(initialTab);
+
+                hideSpinner();
+            }
+
+            async function switchTab(tabId) {
+                document.querySelector('.nav-tab.active')?.classList.remove('active');
+                const newTab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+                if (newTab) newTab.classList.add('active');
+
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                const newContent = document.getElementById(tabId);
+                if (newContent) newContent.classList.add('active');
+
+                switch (tabId) {
+                    case 'dashboard': await loadDashboardData(); break;
+                    case 'goals': await loadGoals(); break;
+                    case 'pomodoro': await loadPomodoro(); break;
+                    case 'report': await loadReportCalendar(); break;
+                    case 'notes': await loadCategories(); await loadNotes(); break;
+                    case 'habits': await loadHabits(); break;
+                    case 'analytics': await loadAnalytics(); break;
+                }
+            }
+
+            function setupEventListeners() {
+                const themeToggle = document.getElementById('theme-toggle');
+                const currentTheme = localStorage.getItem('theme');
+                if (currentTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    themeToggle.checked = true;
+                }
+                themeToggle.addEventListener('change', () => {
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+                    if (document.querySelector('.nav-tab[data-tab="analytics"].active')) {
+                        loadAnalytics();
+                    }
+                });
+
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => switchTab(e.currentTarget.dataset.tab));
+                });
+
+                document.querySelectorAll('.modal .close-btn').forEach(btn => {
+                    btn.onclick = () => btn.closest('.modal').style.display = 'none';
+                });
+                window.onclick = (event) => {
+                    if (event.target.classList.contains('modal')) {
+                        event.target.style.display = 'none';
+                    }
+                };
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === "Escape") {
+                        document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+                    }
+                    if (e.ctrlKey || e.metaKey) {
+                        switch (e.key) {
+                            case 'k': e.preventDefault(); document.getElementById('global-search-input').focus(); break;
+                            case 'm': e.preventDefault(); switchTab('notes').then(() => openNoteModal()); break;
+                        }
+                    }
+                });
+
+                // Removed task manager event listeners
+                // document.getElementById('task-form').addEventListener('submit', handleTaskSubmit);
+                // document.getElementById('task-sort').addEventListener('change', loadTasks);
+                // document.getElementById('task-edit-form').addEventListener('submit', handleTaskEdit);
+
+                document.getElementById('add-note-btn').addEventListener('click', () => openNoteModal());
+                document.getElementById('save-note-btn').addEventListener('click', handleSaveNote);
+                document.getElementById('delete-note-btn').addEventListener('click', handleDeleteNote);
+
+                document.getElementById('add-category-btn').addEventListener('click', handleAddCategory);
+                document.getElementById('manage-categories-btn').addEventListener('click', openCategoryManageModal);
+                document.getElementById('category-filter').addEventListener('change', loadNotes);
+
+                document.getElementById('report-form').addEventListener('submit', handleReportSubmit);
+                document.querySelectorAll('.chip-group .chip').forEach(chip => {
+                    chip.addEventListener('click', () => {
+                        const group = chip.parentElement;
+                        group.querySelector('.active')?.classList.remove('active');
+                        chip.classList.add('active');
+                    });
+                });
+
+                document.getElementById('add-habit-form').addEventListener('submit', handleHabitSubmit);
+
+                document.getElementById('export-data-btn').addEventListener('click', exportData);
+                document.getElementById('import-file-input').addEventListener('change', importData);
+
+                document.getElementById('global-search-input').addEventListener('input', debounce(handleSearch, 300));
+
+                document.getElementById('add-goal-btn').addEventListener('click', () => openGoalModal());
+                document.getElementById('goal-form').addEventListener('submit', handleSaveGoal);
+                document.getElementById('delete-goal-btn').addEventListener('click', handleDeleteGoal);
+                document.getElementById('request-notification-permission').addEventListener('click', requestNotificationPermission);
+
+                // New Listeners
+                document.getElementById('pomodoro-start').addEventListener('click', startTimer);
+                document.getElementById('pomodoro-pause').addEventListener('click', pauseTimer);
+                document.getElementById('pomodoro-reset').addEventListener('click', resetTimer);
+                document.querySelectorAll('.mood-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                    });
+                });
+                document.querySelectorAll('.theme-dot').forEach(dot => {
+                    dot.addEventListener('click', () => applyTheme(dot.dataset.theme));
+                });
+            }
+
+            initializeApp();
+
+            async function loadDashboardData() {
+                // Removed all task summary code (db.getAllData('tasks'), dashboard-tasks, etc.)
+                // Only notes and goals summary remain
+                // ... existing code for notes and goals ...
+                await renderDashboardNotes();
+                await renderDashboardHabits();
+                await renderDashboardGoals();
+            }
+
+            async function renderDashboardNotes() {
+                const notesList = document.getElementById('dashboard-notes-list');
+                notesList.innerHTML = '';
+                let notes = await db.getAllData('notes');
+                notes = notes.sort((a, b) => (b.pinned - a.pinned) || (new Date(b.updatedAt) - new Date(a.updatedAt)));
+                // সর্বশেষ ৫টি নোট নিন
+                notes = notes.slice(0, 5);
+                // তারিখ অনুযায়ী গ্রুপ করুন
+                const groups = {};
+                notes.forEach(note => {
+                    let groupKey = 'No Date';
+                    if (note.updatedAt) {
+                        groupKey = formatDateHeading(note.updatedAt);
+                    }
+                    if (!groups[groupKey]) groups[groupKey] = [];
+                    groups[groupKey].push(note);
+                });
+                let html = '';
+                Object.keys(groups).forEach(groupKey => {
+                    html += `<li style="font-weight:600; color:var(--primary-color); margin:0.7em 0 0.2em 0; font-size:1.02em; background:none; border:none;">${groupKey}</li>`;
+                    html += groups[groupKey].map(note => `<li class="compact-list-item" data-id="${note.id}"><span class="item-title">${note.title || 'Untitled'}</span><span class="item-meta">${note.updatedAt ? new Date(note.updatedAt).toLocaleDateString('bn-BD') : ''}</span></li>`).join('');
+                });
+                if (!html) {
+                    html = '<li class="compact-list-item" style="justify-content:center; color:var(--text-secondary);">কোনো নোট নেই</li>';
+                }
+                notesList.innerHTML = html;
+                // ক্লিক করলে modal খুলবে
+                notesList.querySelectorAll('.compact-list-item').forEach(li => {
+                    const id = li.getAttribute('data-id');
+                    const note = notes.find(n => n.id == id);
+                    li.onclick = () => openNoteModal(note);
+                });
+            }
+
+            async function handleReportSubmit(e) {
+                e.preventDefault();
+                const reportForm = document.getElementById('report-form');
+                const formData = new FormData(reportForm);
+                const reportData = {};
+                for (let [key, value] of formData.entries()) { reportData[key] = value; }
+                reportData.focus_level = reportForm.querySelector('.chip-group[data-name="focus_level"] .chip.active')?.dataset.value || 'N/A';
+                reportData.date = new Date().toISOString().slice(0, 10);
+                reportData.mood = document.querySelector('.mood-option.selected')?.dataset.mood || 'N/A'; // NEW: Save mood
+
+                await db.putData('dailyReports', reportData);
+                showToast('রিপোর্ট সফলভাবে সেভ হয়েছে!');
+                reportForm.reset();
+                reportForm.querySelectorAll('.chip.active').forEach(c => c.classList.remove('active'));
+                reportForm.querySelectorAll('.mood-option.selected').forEach(c => c.classList.remove('selected')); // NEW: Reset mood
+                await loadReportCalendar();
+                await loadDashboardData();
+            }
+            async function loadReportCalendar() {
+                const container = document.getElementById('calendar-container');
+                container.innerHTML = '';
+
+                const reports = await db.getAllData('dailyReports');
+                const eventDates = new Set(reports.map(r => r.date));
+
+                const year = calendarDate.getFullYear();
+                const month = calendarDate.getMonth();
+                const monthName = new Date(year, month).toLocaleDateString('bn-BD', { month: 'long', year: 'numeric' });
+
+                const header = document.createElement('div');
+                header.className = 'vcal-header';
+                header.innerHTML = `<button id="cal-prev"><i class="fas fa-chevron-left"></i></button><span>${monthName}</span><button id="cal-next"><i class="fas fa-chevron-right"></i></button>`;
+                container.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'vcal-grid';
+                ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'].forEach(day => grid.innerHTML += `<div class="vcal-day-name">${day}</div>`);
+
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                for (let i = 0; i < firstDayOfMonth; i++) grid.appendChild(document.createElement('div'));
+
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayEl = document.createElement('div');
+                    dayEl.textContent = i;
+                    dayEl.className = 'vcal-date';
+                    const dateString = new Date(year, month, i, 12).toISOString().slice(0, 10);
+
+                    if (dateString === new Date().toISOString().slice(0, 10)) dayEl.classList.add('today');
+                    if (eventDates.has(dateString)) {
+                        dayEl.classList.add('has-event');
+                        dayEl.onclick = () => viewReport(dateString);
+                    }
+                    grid.appendChild(dayEl);
+                }
+                container.appendChild(grid);
+
+                document.getElementById('cal-prev').onclick = () => { calendarDate.setMonth(month - 1); loadReportCalendar(); };
+                document.getElementById('cal-next').onclick = () => { calendarDate.setMonth(month + 1); loadReportCalendar(); };
+            }
+            async function viewReport(dateKey) {
+                const report = await db.getData('dailyReports', dateKey);
+                if (!report) return;
+                const modal = document.getElementById('report-view-modal');
+                document.getElementById('report-view-date').textContent = new Date(dateKey + 'T12:00:00').toLocaleDateString('bn-BD', { dateStyle: 'full' });
+                document.getElementById('report-view-content').innerHTML = `
+                <div class="report-item" style="margin-bottom:1rem;"><h4><i class="fas fa-smile"></i> মুড</h4><p><b>কেমন ছিল:</b> ${report.mood || 'N/A'}</p></div>
+                <div class="report-item" style="margin-bottom:1rem;"><h4><i class="fas fa-tasks"></i> সাধারণ চেকলিস্ট</h4><p><b>পর্ণ:</b> ${report.porn_check}</p><p><b>মাস্টারবেশন:</b> ${report.masturbation_check}</p></div>
+                <div class="report-item" style="margin-bottom:1rem;"><h4><i class="fas fa-book"></i> পড়াশোনা</h4><p><b>কত ঘণ্টা:</b> ${report.study_hours || 'N/A'}</p><p><b>সিভিল:</b> ${report.civil_learn || 'N/A'}</p><p><b>সরকারি:</b> ${report.govt_study || 'N/A'}</p><p><b>অটোক্যাড:</b> ${report.autocad_drawing || 'N/A'}</p></div>
+                <div class="report-item" style="margin-bottom:1rem;"><h4><i class="fas fa-feather-alt"></i> জার্নাল</h4><p><b>অনুভুতি:</b> ${report.feeling_today || 'N/A'}</p><p><b>ভাবনা:</b> ${report.today_thoughts || 'N/A'}</p><p><b>লক্ষ্য:</b> ${report.today_goal || 'N/A'}</p><p><b>পূরণ:</b> ${report.goal_completion || 'N/A'}</p><p><b>নিজেকে শেখানো:</b> ${report.self_teaching || 'N/A'}</p><p><b>প্রার্থনা:</b> ${report.prayer || 'N/A'}</p></div>
+                <div class="report-item"><h4><i class="fas fa-brain"></i> Reflection</h4><p><b>ফোকাস:</b> ${report.focus_level || 'N/A'}</p><p><b>আত্মনিয়ন্ত্রণ:</b> ${report.self_control_level || 'N/A'} / 10</p></div>`;
+                modal.style.display = 'block';
+            }
+
+            async function handleTaskSubmit(e) {
+                e.preventDefault();
+                const taskInput = document.getElementById('task-input');
+                if (taskInput.value.trim()) {
+                    const task = {
+                        text: taskInput.value.trim(),
+                        dueDate: document.getElementById('task-due-date').value,
+                        dueTime: document.getElementById('task-due-time').value,
+                        priority: document.getElementById('task-priority').value,
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    };
+                    const newId = await db.addData('tasks', task);
+                    showToast('কাজ যোগ করা হয়েছে।');
+                    if (task.dueDate && task.dueTime) scheduleTaskNotification({ ...task, id: newId });
+                    await loadTasks();
+                    await loadDashboardData();
+                    document.getElementById('task-form').reset();
+                }
+            }
+            async function handleTaskEdit(e) {
+                e.preventDefault();
+                const id = parseInt(document.getElementById('edit-task-id').value);
+                const oldTask = await db.getData('tasks', id);
+                const updatedTask = {
+                    ...oldTask,
+                    text: document.getElementById('edit-task-input').value,
+                    dueDate: document.getElementById('edit-task-due-date').value,
+                    dueTime: document.getElementById('edit-task-due-time').value,
+                    priority: document.getElementById('edit-task-priority').value,
+                };
+                await db.putData('tasks', updatedTask);
+                document.getElementById('task-edit-modal').style.display = 'none';
+                await loadTasks();
+                await loadDashboardData();
+                showToast('কাজ আপডেট করা হয়েছে।');
+            }
+            async function loadTasks() {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = '';
+                let tasks = await db.getAllData('tasks');
+                if (tasks.length === 0) {
+                    taskList.innerHTML = `<div class="empty-state">${emptyTasksSVG}</div>`;
+                    return;
+                }
+                const sortValue = document.getElementById('task-sort').value;
+                const priorityMap = { high: 3, medium: 2, low: 1 };
+                tasks.sort((a, b) => {
+                    if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                    if (sortValue === 'newest') return new Date(b.createdAt) - new Date(a.createdAt);
+                    if (sortValue === 'priority') return priorityMap[b.priority] - priorityMap[a.priority];
+                    if (sortValue === 'dueDate') {
+                        if (!a.dueDate) return 1; if (!b.dueDate) return -1;
+                        return new Date(a.dueDate) - new Date(b.dueDate);
+                    }
+                    return 0;
+                });
+                const fragment = document.createDocumentFragment();
+                for (const task of tasks) {
+                    await renderTask(task, fragment);
+                }
+                taskList.appendChild(fragment);
+            }
+            async function renderTask(task, fragment) {
+                const li = document.createElement('li');
+                li.className = `task-item ${task.completed ? 'completed' : ''}`;
+                li.dataset.taskId = task.id;
+
+                let meta = '';
+                if (task.dueDate) meta += `<i class="fas fa-calendar-alt"></i> ${new Date(task.dueDate + 'T12:00:00').toLocaleDateString('bn-BD')} `;
+                if (task.dueTime) meta += `<i class="fas fa-clock"></i> ${task.dueTime}`;
+
+                li.innerHTML = `
+                <div class="task-main">
+                    <span class="task-priority ${task.priority}"></span>
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} title="Mark as completed">
+                    <div class="task-content">
+                        <div class="task-text">${task.text}</div>
+                        <div class="task-meta">${meta}</div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="add-subtask-btn" title="Add Sub-task"><i class="fas fa-plus-square"></i></button>
+                        <button class="edit-task-btn" title="Edit Task"><i class="fas fa-edit"></i></button>
+                        <button class="delete-task-btn" title="Delete Task"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <ul class="sub-task-list"></ul>
+                <form class="add-subtask-form" style="display:none;"><input type="text" placeholder="নতুন সাব-টাস্ক..." required><button type="submit" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Add</button></form>
+            `;
+
+                const subtaskList = li.querySelector('.sub-task-list');
+                await loadSubTasks(task.id, subtaskList);
+
+                li.querySelector('input[type="checkbox"]').onchange = async (e) => {
+                    task.completed = e.target.checked;
+                    await db.putData('tasks', task);
+                    li.classList.toggle('completed', task.completed);
+                    await loadDashboardData();
+                    await loadGoals();
+                };
+                li.querySelector('.delete-task-btn').onclick = async () => {
+                    if (confirm('আপনি কি এই কাজটি এবং এর সকল সাব-টাস্ক ডিলিট করতে চান?')) {
+                        const subtasks = await db.getDataByIndex('subtasks', 'taskId', task.id);
+                        for (const subtask of subtasks) {
+                            await db.deleteData('subtasks', subtask.id);
+                        }
+                        await db.deleteData('tasks', task.id);
+                        await loadTasks(); await loadDashboardData(); await loadGoals();
+                        showToast('কাজ ডিলিট করা হয়েছে।', 'error');
+                    }
+                };
+                li.querySelector('.edit-task-btn').onclick = () => {
+                    document.getElementById('edit-task-id').value = task.id;
+                    document.getElementById('edit-task-input').value = task.text;
+                    document.getElementById('edit-task-due-date').value = task.dueDate;
+                    document.getElementById('edit-task-due-time').value = task.dueTime;
+                    document.getElementById('edit-task-priority').value = task.priority;
+                    document.getElementById('task-edit-modal').style.display = 'block';
+                };
+                li.querySelector('.add-subtask-btn').onclick = (e) => {
+                    const form = e.currentTarget.closest('.task-item').querySelector('.add-subtask-form');
+                    form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+                };
+                li.querySelector('.add-subtask-form').onsubmit = (e) => handleAddSubtask(e, task.id);
+
+                fragment.appendChild(li);
+            }
+            async function loadSubTasks(taskId, container) {
+                container.innerHTML = '';
+                const subtasks = await db.getDataByIndex('subtasks', 'taskId', taskId);
+                for (const subtask of subtasks) {
+                    const subLi = document.createElement('li');
+                    subLi.className = `sub-task-item ${subtask.completed ? 'completed' : ''}`;
+                    subLi.innerHTML = `<input type="checkbox" ${subtask.completed ? 'checked' : ''}> <span>${subtask.text}</span>`;
+                    subLi.querySelector('input').onchange = async (e) => {
+                        subtask.completed = e.target.checked;
+                        await db.putData('subtasks', subtask);
+                        subLi.classList.toggle('completed', subtask.completed);
+                    };
+                    container.appendChild(subLi);
+                }
+            }
+            async function handleAddSubtask(e, taskId) {
+                e.preventDefault();
+                const input = e.target.querySelector('input');
+                const text = input.value.trim();
+                if (text) {
+                    const subtask = { taskId, text, completed: false };
+                    await db.addData('subtasks', subtask);
+                    const container = e.target.closest('.task-item').querySelector('.sub-task-list');
+                    await loadSubTasks(taskId, container);
+                    input.value = '';
+                }
+            }
+
+            async function handleSaveNote() {
+                const noteId = document.getElementById('note-id-input').value ? parseInt(document.getElementById('note-id-input').value) : null;
+                const title = document.getElementById('note-title-input').value.trim();
+                const categoryId = document.getElementById('note-category-select').value;
+                const tags = document.getElementById('note-tags-input').value.split(',').map(t => t.trim()).filter(Boolean);
+                if (!title && quill.getLength() <= 1) { showToast('নোট খালি রাখা যাবে না।', 'error'); return; }
+
+                let noteData;
+                if (noteId) {
+                    const oldNote = await db.getData('notes', noteId);
+                    noteData = {
+                        ...oldNote, title, body: quill.root.innerHTML,
+                        categoryId: categoryId ? parseInt(categoryId) : null, tags,
+                        updatedAt: new Date().toISOString()
+                    };
+                } else {
+                    noteData = {
+                        title, body: quill.root.innerHTML,
+                        categoryId: categoryId ? parseInt(categoryId) : null, tags, pinned: false,
+                        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+                    };
+                }
+
+                await db.putData('notes', noteData);
+                document.getElementById('note-modal').style.display = 'none';
+                showToast('নোট সেভ করা হয়েছে।');
+                await loadNotes(); await loadDashboardData();
+            }
+            async function handleDeleteNote() {
+                const noteId = parseInt(document.getElementById('note-id-input').value);
+                if (confirm('আপনি কি নিশ্চিত যে এই নোটটি ডিলিট করতে চান?')) {
+                    await db.deleteData('notes', noteId);
+                    document.getElementById('note-modal').style.display = 'none';
+                    showToast('নোট ডিলিট করা হয়েছে।', 'error');
+                    await loadNotes(); await loadDashboardData();
+                }
+            }
+            async function toggleNotePin(noteId, e) {
+                e.stopPropagation();
+                const note = await db.getData('notes', noteId);
+                note.pinned = !note.pinned;
+                note.updatedAt = new Date().toISOString();
+                await db.putData('notes', note);
+                await loadNotes();
+            }
+            async function openNoteModal(note = null) {
+                const modal = document.getElementById('note-modal');
+                document.getElementById('note-form').reset();
+                document.getElementById('note-id-input').value = '';
+
+                if (!quill) quill = new Quill('#note-editor', { theme: 'snow', placeholder: 'এখানে লেখা শুরু করুন...' });
+
+                if (note) {
+                    document.getElementById('note-id-input').value = note.id;
+                    document.getElementById('note-title-input').value = note.title;
+                    quill.root.innerHTML = note.body || '';
+                    document.getElementById('note-category-select').value = note.categoryId || '';
+                    document.getElementById('note-tags-input').value = note.tags?.join(', ') || '';
+                    document.getElementById('delete-note-btn').style.display = 'inline-flex';
+                    const timestampsDiv = document.getElementById('note-timestamps');
+                    timestampsDiv.innerHTML = `তৈরি: ${new Date(note.createdAt).toLocaleString('bn-BD')} | আপডেট: ${new Date(note.updatedAt).toLocaleString('bn-BD')}`;
+                } else {
+                    quill.root.innerHTML = '';
+                    document.getElementById('delete-note-btn').style.display = 'none';
+                    document.getElementById('note-timestamps').innerHTML = '';
+                }
+                modal.style.display = 'block';
+            }
+            async function loadNotes() {
+                const notesList = document.getElementById('notes-list');
+                notesList.innerHTML = '';
+                let notes = await db.getAllData('notes');
+                const filterId = document.getElementById('category-filter').value;
+                if (filterId !== 'all') notes = notes.filter(n => String(n.categoryId) === filterId);
+                notes = notes.sort((a, b) => (b.pinned - a.pinned) || (new Date(b.updatedAt) - new Date(a.updatedAt)));
+                // Group by updated date string
+                const groups = {};
+                notes.forEach(note => {
+                    let groupKey = 'No Date';
+                    if (note.updatedAt) {
+                        groupKey = formatDateHeading(note.updatedAt);
+                    }
+                    if (!groups[groupKey]) groups[groupKey] = [];
+                    groups[groupKey].push(note);
+                });
+                let html = '';
+                Object.keys(groups).sort((a, b) => {
+                    if (a === 'No Date') return 1;
+                    if (b === 'No Date') return -1;
+                    return new Date(b) - new Date(a);
+                }).forEach(groupKey => {
+                    html += `<li style="font-weight:600; color:var(--primary-color); margin:0.7em 0 0.2em 0; font-size:1.02em; background:none; border:none;">${groupKey}</li>`;
+                    html += groups[groupKey].map(note => `<li class="compact-list-item" data-id="${note.id}"><span class="item-title">${note.title || 'Untitled'}</span><span class="item-meta">${note.updatedAt ? new Date(note.updatedAt).toLocaleDateString('bn-BD') : ''}</span></li>`).join('');
+                });
+                if (!html) {
+                    html = '<li class="compact-list-item" style="justify-content:center; color:var(--text-secondary);">কোনো নোট নেই</li>';
+                }
+                notesList.innerHTML = html;
+                // Add click event for modal
+                notesList.querySelectorAll('.compact-list-item').forEach(li => {
+                    const id = li.getAttribute('data-id');
+                    const note = notes.find(n => n.id == id);
+                    li.onclick = () => openNoteModal(note);
+                });
+            }
+            async function handleAddCategory() {
+                const input = document.getElementById('category-input');
+                const name = input.value.trim();
+                if (name) {
+                    await db.addData('categories', { name });
+                    input.value = '';
+                    showToast('ক্যাটাগরি যোগ করা হয়েছে।');
+                    await loadCategories();
+                }
+            }
+            async function loadCategories() {
+                const categories = await db.getAllData('categories');
+                const filterSelect = document.getElementById('category-filter');
+                const noteSelect = document.getElementById('note-category-select');
+                const currentFilter = filterSelect.value;
+                const currentNoteCat = noteSelect.value;
+                filterSelect.innerHTML = '<option value="all">All Categories</option>';
+                noteSelect.innerHTML = '<option value="">Select Category</option>';
+                categories.forEach(cat => {
+                    const optionHtml = `<option value="${cat.id}">${cat.name}</option>`;
+                    filterSelect.insertAdjacentHTML('beforeend', optionHtml);
+                    noteSelect.insertAdjacentHTML('beforeend', optionHtml);
+                });
+                filterSelect.value = currentFilter;
+                noteSelect.value = currentNoteCat;
+            }
+            async function openCategoryManageModal() {
+                const modal = document.getElementById('category-manage-modal');
+                const list = document.getElementById('category-list-manage');
+                list.innerHTML = '';
+                const categories = await db.getAllData('categories');
+                categories.forEach(cat => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span>${cat.name}</span> <button class="btn btn-danger" style="padding:0.2rem 0.5rem;">Delete</button>`;
+                    li.querySelector('button').onclick = async () => {
+                        if (confirm(`'${cat.name}' ক্যাটাগরি ডিলিট করলে এর অন্তর্গত সকল নোট Uncategorized হয়ে যাবে। আপনি কি নিশ্চিত?`)) {
+                            const notesToUpdate = await db.getDataByIndex('notes', 'categoryId', cat.id);
+                            for (const note of notesToUpdate) {
+                                note.categoryId = null;
+                                await db.putData('notes', note);
+                            }
+                            await db.deleteData('categories', cat.id);
+                            await loadCategories();
+                            await openCategoryManageModal();
+                        }
+                    };
+                    list.appendChild(li);
+                });
+                modal.style.display = 'block';
+            }
+
+            async function handleHabitSubmit(e) {
+                e.preventDefault();
+                const habitInput = document.getElementById('habit-input');
+                const habitName = habitInput.value.trim();
+                if (habitName) {
+                    await db.addData('habits', { name: habitName, createdAt: new Date() });
+                    habitInput.value = '';
+                    await loadHabits();
+                }
+            }
+            async function loadHabits() {
+                const habitContainer = document.getElementById('habit-tracker-container');
+                habitContainer.innerHTML = '';
+                const habits = await db.getAllData('habits');
+                const entries = await db.getAllData('habit_entries');
+                if (habits.length === 0) {
+                    habitContainer.innerHTML = `<div class="empty-state">${emptyHabitsSVG}</div>`;
+                    return;
+                }
+                const grid = document.createElement('div');
+                grid.className = 'habit-tracker-grid';
+                grid.appendChild(document.createElement('div'));
+                for (let i = 1; i <= 31; i++) {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'habit-day-header';
+                    dayHeader.textContent = i;
+                    grid.appendChild(dayHeader);
+                }
+                for (const habit of habits) {
+                    const nameEl = document.createElement('div');
+                    nameEl.className = 'habit-info';
+
+                    let streak = 0;
+                    let checkDate = new Date();
+                    while (true) {
+                        const dateString = new Date(Date.UTC(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate())).toISOString().slice(0, 10);
+                        const entry = entries.find(e => e.habitId === habit.id && e.date === dateString);
+                        if (entry) {
+                            streak++;
+                            checkDate.setDate(checkDate.getDate() - 1);
+                        } else {
+                            break;
+                        }
+                    }
+                    nameEl.innerHTML = `<span class="habit-name">${habit.name}</span> <span class="habit-streak">${streak} 🔥</span>`;
+                    grid.appendChild(nameEl);
+
+                    for (let i = 1; i <= 31; i++) {
+                        const dayEl = document.createElement('div');
+                        dayEl.className = 'habit-day';
+                        const dateString = new Date(Date.UTC(calendarDate.getFullYear(), calendarDate.getMonth(), i)).toISOString().slice(0, 10);
+                        const entry = entries.find(e => e.habitId === habit.id && e.date === dateString);
+                        if (entry) dayEl.classList.add('done');
+                        dayEl.onclick = async () => {
+                            const existingEntry = entries.find(e => e.habitId === habit.id && e.date === dateString);
+                            if (existingEntry) {
+                                await db.deleteData('habit_entries', existingEntry.id);
+                            } else {
+                                await db.addData('habit_entries', { habitId: habit.id, date: dateString });
+                            }
+                            await loadHabits();
+                        };
+                        grid.appendChild(dayEl);
+                    }
+                }
+                habitContainer.appendChild(grid);
+            }
+
+            async function openGoalModal(goal = null) {
+                const modal = document.getElementById('goal-modal');
+                const form = document.getElementById('goal-form');
+                form.reset();
+                document.getElementById('goal-id-input').value = '';
+                document.getElementById('delete-goal-btn').style.display = 'none';
+
+                const select = document.getElementById('goal-tasks-select');
+                select.innerHTML = '';
+                const tasks = await db.getAllData('tasks');
+                tasks.forEach(task => {
+                    const option = new Option(`${task.text} (${task.priority})`, task.id);
+                    select.appendChild(option);
+                });
+
+                if (goal) {
+                    document.getElementById('goal-id-input').value = goal.id;
+                    document.getElementById('goal-title-input').value = goal.title;
+                    document.getElementById('delete-goal-btn').style.display = 'inline-flex';
+                    if (goal.linkedTasks) {
+                        goal.linkedTasks.forEach(taskId => {
+                            const option = select.querySelector(`option[value="${taskId}"]`);
+                            if (option) option.selected = true;
+                        });
+                    }
+                }
+                modal.style.display = 'block';
+            }
+            async function handleSaveGoal(e) {
+                e.preventDefault();
+                const goalId = document.getElementById('goal-id-input').value ? parseInt(document.getElementById('goal-id-input').value) : null;
+                const title = document.getElementById('goal-title-input').value.trim();
+                const selectedOptions = document.getElementById('goal-tasks-select').selectedOptions;
+                const linkedTasks = Array.from(selectedOptions).map(opt => parseInt(opt.value));
+
+                if (!title) {
+                    showToast('লক্ষ্যের একটি শিরোনাম দিন।', 'error');
+                    return;
+                }
+
+                let goalData;
+                if (goalId) {
+                    const oldGoal = await db.getData('goals', goalId);
+                    goalData = { ...oldGoal, title, linkedTasks };
+                } else {
+                    goalData = { title, linkedTasks };
+                }
+
+                await db.putData('goals', goalData);
+                document.getElementById('goal-modal').style.display = 'none';
+                showToast('লক্ষ্য সেভ করা হয়েছে।');
+                await loadGoals();
+                await loadDashboardData();
+            }
+            async function handleDeleteGoal() {
+                const goalId = parseInt(document.getElementById('goal-id-input').value);
+                if (confirm('আপনি কি এই লক্ষ্যটি ডিলিট করতে চান?')) {
+                    await db.deleteData('goals', goalId);
+                    document.getElementById('goal-modal').style.display = 'none';
+                    showToast('লক্ষ্য ডিলিট করা হয়েছে।', 'error');
+                    await loadGoals();
+                    await loadDashboardData();
+                }
+            }
+            async function loadGoals() {
+                const goalsGrid = document.getElementById('goals-grid');
+                goalsGrid.innerHTML = '';
+                const goals = await db.getAllData('goals');
+
+                if (goals.length === 0) {
+                    goalsGrid.innerHTML = `<div class="empty-state">${emptyGoalsSVG}</div>`;
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+                for (const goal of goals) {
+                    let progress = 0;
+                    let linkedTasksHTML = '<li>কোনো কাজ লিঙ্ক করা নেই।</li>';
+                    if (goal.linkedTasks && goal.linkedTasks.length > 0) {
+                        const linkedTasks = await Promise.all(goal.linkedTasks.map(id => db.getData('tasks', id)));
+                        const validTasks = linkedTasks.filter(Boolean);
+                        const completedTasks = validTasks.filter(t => t.completed).length;
+                        progress = validTasks.length > 0 ? Math.round((completedTasks / validTasks.length) * 100) : 0;
+                        linkedTasksHTML = validTasks.map(t => `<li class="${t.completed ? 'completed' : ''}">${t.text}</li>`).join('');
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'card goal-card';
+
+                    card.innerHTML = `
+                    <div class="goal-header">
+                        <h3>${goal.title}</h3>
+                        <button class="btn btn-secondary edit-goal-btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">Edit</button>
+                    </div>
+                    <div class="goal-progress-container">
+                        <div class="goal-progress">
+                            <div class="goal-progress-bar" style="width: ${progress}%;"></div>
+                        </div>
+                        <p class="goal-progress-text">${progress}% সম্পন্ন</p>
+                    </div>
+                    <div>
+                        <strong>সম্পর্কিত কাজ:</strong>
+                        <ul class="goal-linked-tasks">${linkedTasksHTML}</ul>
+                    </div>
+                `;
+                    card.querySelector('.edit-goal-btn').onclick = () => openGoalModal(goal);
+                    fragment.appendChild(card);
+                }
+                goalsGrid.appendChild(fragment);
+            }
+
+            async function loadAnalytics() {
+                const reports = await db.getAllData('dailyReports');
+                const tasks = await db.getAllData('tasks');
+                const analyticsContainer = document.getElementById('analytics-container');
+
+                // Destroy old charts and clear container
+                Object.values(activeCharts).forEach(chart => chart && chart.destroy && chart.destroy());
+                activeCharts = {};
+                analyticsContainer.innerHTML = '';
+
+                // Add new charts
+                analyticsContainer.innerHTML = `
+                <div class="chart-card"><h3><i class="fas fa-tasks"></i> টাস্ক কমপ্লিশন রেট</h3><canvas id="task-completion-chart"></canvas></div>
+                <div class="chart-card"><h3><i class="fas fa-book-reader"></i> পড়াশোনার সময় (ঘণ্টা)</h3><canvas id="study-hours-chart"></canvas></div>
+                <div class="chart-card"><h3><i class="fas fa-brain"></i> ফোকাস লেভেল</h3><canvas id="focus-level-chart"></canvas></div>
+                <div class="chart-card"><h3><i class="fas fa-smile"></i> মুড ডিস্ট্রিবিউশন</h3><canvas id="mood-chart"></canvas></div>
+            `;
+
+                if (reports.length < 1 && tasks.length < 1) {
+                    analyticsContainer.innerHTML = `<div class="empty-state">${emptyAnalyticsSVG}</div>`;
+                    return;
+                }
+
+                const completedTasks = tasks.filter(t => t.completed).length;
+                const pendingTasks = tasks.length - completedTasks;
+                renderChart('task-completion-chart', 'pie', ['সম্পন্ন', 'বাকি'], [completedTasks, pendingTasks]);
+
+                reports.sort((a, b) => new Date(a.date) - new Date(b.date));
+                const labels = reports.map(r => new Date(r.date + 'T12:00:00').toLocaleDateString('bn-BD', { day: 'numeric', month: 'short' }));
+
+                const studyData = reports.map(r => parseFloat(r.study_hours) || 0);
+                renderChart('study-hours-chart', 'bar', labels, studyData, 'পড়ার ঘণ্টা');
+
+                const focusData = { 'দুর্বল': 0, 'মাঝারি': 0, 'দুর্দান্ত': 0 };
+                reports.forEach(r => { if (r.focus_level && focusData.hasOwnProperty(r.focus_level)) focusData[r.focus_level]++; });
+                renderChart('focus-level-chart', 'doughnut', Object.keys(focusData), Object.values(focusData));
+
+                const moodData = { 'happy': 0, 'calm': 0, 'sad': 0, 'angry': 0, 'productive': 0 };
+                reports.forEach(r => { if (r.mood && moodData.hasOwnProperty(r.mood)) moodData[r.mood]++; });
+                renderChart('mood-chart', 'polarArea', Object.keys(moodData), Object.values(moodData));
+            }
+            function renderChart(canvasId, type, labels, data, label = '') {
+                // Find the correct chart-card by canvasId (robust, no :has())
+                const chartCard = Array.from(document.querySelectorAll('.chart-card')).find(card =>
+                    card.querySelector(`#${canvasId}`) || card.innerHTML.includes(canvasId)
+                );
+                if (!chartCard) return;
+
+                // Remove all old canvases in this card
+                chartCard.querySelectorAll('canvas').forEach(c => c.remove());
+
+                // Create and append new canvas
+                const newCanvas = document.createElement('canvas');
+                newCanvas.id = canvasId;
+                chartCard.appendChild(newCanvas);
+
+                const ctx = newCanvas.getContext('2d');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                const textColor = isDarkMode ? '#e4e6eb' : '#1c1e21';
+
+                activeCharts[canvasId] = new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: label, data: data,
+                            backgroundColor: ['#28a745', '#dc3545', '#ffc107', '#17a2b8', '#6f42c1', '#fd7e14'],
+                            borderColor: type === 'bar' ? 'rgba(0, 123, 255, 1)' : (getComputedStyle(document.body).getPropertyValue('--bg-secondary') || '#fff'), borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { labels: { color: textColor } } },
+                        scales: (type === 'bar' || type === 'line') ? {
+                            y: { ticks: { color: textColor }, grid: { color: isDarkMode ? '#3e4042' : '#ced0d4' } },
+                            x: { ticks: { color: textColor }, grid: { display: false } }
+                        } : {}
+                    }
+                });
+            }
+
+            async function exportData() {
+                showSpinner();
+                try {
+                    const dataToExport = {
+                        tasks: await db.getAllData('tasks'), subtasks: await db.getAllData('subtasks'),
+                        notes: await db.getAllData('notes'), categories: await db.getAllData('categories'),
+                        dailyReports: await db.getAllData('dailyReports'), habits: await db.getAllData('habits'),
+                        habit_entries: await db.getAllData('habit_entries'), goals: await db.getAllData('goals'),
+                    };
+                    const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `personal_dashboard_backup_${new Date().toISOString().slice(0, 10)}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showToast('ডেটা এক্সপোর্ট সফল হয়েছে।');
+                } catch (err) {
+                    showToast('এক্সপোর্ট করার সময় একটি ত্রুটি হয়েছে।', 'error');
+                } finally {
+                    hideSpinner();
+                }
+            }
+            async function importData(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                if (!confirm("সতর্কতা! এটি আপনার বর্তমান সকল ডেটা মুছে ফেলবে। আপনি কি নিশ্চিত?")) return;
+
+                showSpinner();
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        const stores = ['tasks', 'subtasks', 'notes', 'categories', 'dailyReports', 'habits', 'habit_entries', 'goals'];
+
+                        for (const storeName of stores) {
+                            if (data[storeName] && Array.isArray(data[storeName])) {
+                                await db.clearStore(storeName);
+                                for (const item of data[storeName]) {
+                                    await db.putData(storeName, item);
+                                }
+                            }
+                        }
+                        showToast('ডেটা ইমপোর্ট সফল হয়েছে। অ্যাপ রিলোড হচ্ছে...');
+                        setTimeout(() => window.location.reload(), 2000);
+                    } catch (error) {
+                        showToast('ফাইলটি সঠিক নয় বা নষ্ট হয়ে গেছে।', 'error');
+                        console.error("Import error:", error);
+                    } finally {
+                        hideSpinner();
+                        event.target.value = null;
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            async function requestNotificationPermission() {
+                if (!("Notification" in window)) {
+                    showToast("এই ব্রাউজার নোটিফিকেশন সাপোর্ট করে না।", "error");
+                } else if (Notification.permission === "granted") {
+                    showToast("নোটিফিকেশন পারমিশন আগেই দেওয়া আছে।");
+                } else if (Notification.permission !== "denied") {
+                    const permission = await Notification.requestPermission();
+                    if (permission === "granted") {
+                        new Notification("ধন্যবাদ! নোটিফিকেশন চালু হয়েছে।");
+                        showToast("নোটিফিকেশন চালু হয়েছে।");
+                    } else {
+                        showToast("নোটিফিকেশন ব্লক করা হয়েছে।", "error");
+                    }
+                } else {
+                    showToast("নোটিফিকেশন ব্লক করা আছে। ব্রাউজার সেটিং থেকে চালু করুন।", "error");
+                }
+            }
+            function scheduleTaskNotification(task) {
+                if (Notification.permission !== 'granted' || !task.dueDate || !task.dueTime) return;
+                const dueDateTime = new Date(`${task.dueDate}T${task.dueTime}`);
+                const now = new Date();
+                const timeToRing = dueDateTime.getTime() - now.getTime();
+                if (timeToRing > 0) {
+                    setTimeout(() => {
+                        new Notification('কাজের রিমাইন্ডার', {
+                            body: task.text,
+                            icon: 'https://img.icons8.com/plasticine/100/000000/task.png'
+                        });
+                    }, timeToRing);
+                }
+            }
+
+            async function handleSearch(e) {
+                const query = e.target.value.toLowerCase().trim();
+                const resultsContainer = document.getElementById('search-results-container');
+                if (!query) {
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.style.display = 'none';
+                    return;
+                }
+
+                const [tasks, notes] = await Promise.all([db.getAllData('tasks'), db.getAllData('notes')]);
+
+                const taskResults = tasks.filter(t => t.text.toLowerCase().includes(query));
+                const noteResults = notes.filter(n => (n.title && n.title.toLowerCase().includes(query)) || (n.body && n.body.toLowerCase().includes(query)));
+
+                let html = '<div class="card">';
+                if (taskResults.length === 0 && noteResults.length === 0) {
+                    html += '<p style="padding: 0.75rem;">কোনো ফলাফল পাওয়া যায়নি।</p>';
+                } else {
+                    if (taskResults.length > 0) {
+                        html += '<h4>কাজের তালিকা:</h4><ul>';
+                        taskResults.forEach(t => { html += `<li data-task-id="${t.id}">${t.text}</li>`; });
+                        html += '</ul>';
+                    }
+                    if (noteResults.length > 0) {
+                        html += '<h4 style="margin-top:1rem;">নোটস:</h4><ul>';
+                        noteResults.forEach(n => { html += `<li data-note-id="${n.id}">${n.title || 'Untitled'}</li>`; });
+                        html += '</ul>';
+                    }
+                }
+                html += '</div>';
+                resultsContainer.innerHTML = html;
+                resultsContainer.style.display = 'block';
+
+                resultsContainer.querySelectorAll('li[data-note-id]').forEach(li => {
+                    li.onclick = async () => {
+                        const noteId = parseInt(li.dataset.noteId);
+                        const note = await db.getData('notes', noteId);
+                        await switchTab('notes');
+                        openNoteModal(note);
+                        resultsContainer.innerHTML = '';
+                        resultsContainer.style.display = 'none';
+                        document.getElementById('global-search-input').value = '';
+                    }
+                });
+                resultsContainer.querySelectorAll('li[data-task-id]').forEach(li => {
+                    li.onclick = async () => {
+                        await switchTab('tasks');
+                        setTimeout(() => {
+                            const taskEl = document.querySelector(`.task-item[data-task-id="${li.dataset.taskId}"]`);
+                            if (taskEl) {
+                                taskEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                taskEl.style.backgroundColor = 'var(--warning-color)';
+                                setTimeout(() => { taskEl.style.backgroundColor = '' }, 2000);
+                            }
+                        }, 100);
+                        resultsContainer.innerHTML = '';
+                        resultsContainer.style.display = 'none';
+                        document.getElementById('global-search-input').value = '';
+                    }
+                });
+            }
+
+            // --- NEW FEATURES LOGIC ---
+            const pomodoroTimeEl = document.getElementById('pomodoro-time');
+            const startBtn = document.getElementById('pomodoro-start');
+            const pauseBtn = document.getElementById('pomodoro-pause');
+            const resetBtn = document.getElementById('pomodoro-reset');
+            let pomodoroInterval;
+            let timeLeft = 1500;
+            let isPaused = true;
+            let isWorkSession = true;
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const displayString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                pomodoroTimeEl.textContent = displayString;
+                document.title = `${displayString} - ${isWorkSession ? 'Work Session' : 'Break Time'}`;
+            }
+            function startTimer() {
+                if (isPaused) {
+                    isPaused = false;
+                    startBtn.style.display = 'none';
+                    pauseBtn.style.display = 'inline-flex';
+                    pomodoroInterval = setInterval(() => {
+                        timeLeft--;
+                        updateTimerDisplay();
+                        if (timeLeft < 0) {
+                            clearInterval(pomodoroInterval);
+                            if (Notification.permission === "granted") {
+                                new Notification(isWorkSession ? "কাজের সেশন শেষ!" : "বিরতি শেষ!", {
+                                    body: isWorkSession ? "এবার ৫ মিনিটের একটি ছোট বিরতি নিন।" : "কাজে ফিরে আসার সময় হয়েছে।",
+                                    icon: 'https://img.icons8.com/fluency/96/tomato.png'
+                                });
+                            }
+                            isWorkSession = !isWorkSession;
+                            timeLeft = isWorkSession ? 1500 : 300;
+                            updateTimerDisplay();
+                            pauseTimer();
+                        }
+                    }, 1000);
+                }
+            }
+            function pauseTimer() {
+                isPaused = true;
+                startBtn.style.display = 'inline-flex';
+                startBtn.innerHTML = '<i class="fas fa-play"></i> চালিয়ে যান';
+                pauseBtn.style.display = 'none';
+                clearInterval(pomodoroInterval);
+            }
+            function resetTimer() {
+                pauseTimer();
+                isWorkSession = true;
+                timeLeft = 1500;
+                updateTimerDisplay();
+                startBtn.innerHTML = '<i class="fas fa-play"></i> শুরু করুন';
+            }
+
+            function applyTheme(themeName) {
+                // সব থিম ক্লাস রিমুভ করুন
+                document.body.classList.remove(
+                    'theme-green', 'theme-purple', 'theme-blue', 'theme-orange', 'theme-pink', 'theme-teal', 'theme-red'
+                );
+                if (themeName && themeName !== 'default') {
+                    document.body.classList.add(`theme-${themeName}`);
+                }
+                localStorage.setItem('appTheme', themeName);
+                document.querySelectorAll('.theme-dot').forEach(dot => {
+                    dot.classList.toggle('active', dot.dataset.theme === themeName);
+                });
+                // ফিক্স: analytics ট্যাবে একাধিকবার loadAnalytics() না চলে
+                if (document.querySelector('.nav-tab[data-tab="analytics"].active')) {
+                    if (!window.__analyticsLoading) {
+                        window.__analyticsLoading = true;
+                        loadAnalytics().finally(() => { window.__analyticsLoading = false; });
+                    }
+                }
+            }
+
+            document.getElementById('import-data-btn').onclick = function () {
+                document.getElementById('import-file-input').click();
+            };
+            document.getElementById('import-file-input').onchange = importData;
+
+            // Enable/disable Add button based on input
+            const taskInput = document.getElementById('task-input');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            if (taskInput && addTaskBtn) {
+                taskInput.addEventListener('input', function () {
+                    addTaskBtn.disabled = !taskInput.value.trim();
+                });
+                addTaskBtn.disabled = !taskInput.value.trim();
+            }
+
+            // ড্যাশবোর্ডে আজকের যেসব অভ্যাস চেক হয়নি, সেগুলো দেখানো
+            async function renderDashboardHabits() {
+                const habitsDiv = document.getElementById('dashboard-habits');
+                habitsDiv.innerHTML = '';
+                const dbInstance = await db.init();
+                const habits = await db.getAllData('habits');
+                const entries = await db.getAllData('habit_entries');
+                const today = new Date();
+                const todayStr = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate())).toISOString().slice(0, 10);
+                const uncheckedHabits = habits.filter(habit => !entries.find(e => e.habitId === habit.id && e.date === todayStr));
+                if (uncheckedHabits.length === 0) {
+                    habitsDiv.innerHTML = '<div style="color:var(--success-color);text-align:center;">আজকের সব অভ্যাস চেক করা হয়েছে!</div>';
+                    return;
+                }
+                habitsDiv.innerHTML = '<ul class="compact-list">' + uncheckedHabits.map(habit => `<li class="compact-list-item">${habit.name}</li>`).join('') + '</ul>';
+            }
+
+            // ড্যাশবোর্ডে কেবল ১০০% কমপ্লিট হয়নি এমন লক্ষ্যগুলো দেখানো
+            async function renderDashboardGoals() {
+                const goalsDiv = document.getElementById('dashboard-goals');
+                goalsDiv.innerHTML = '';
+                const goals = await db.getAllData('goals');
+                if (!goals.length) {
+                    goalsDiv.innerHTML = '<div style="color:var(--text-secondary);text-align:center;">কোনো লক্ষ্য নেই</div>';
+                    return;
+                }
+                let html = '';
+                for (const goal of goals) {
+                    let progress = 0;
+                    if (goal.linkedTasks && goal.linkedTasks.length > 0) {
+                        const linkedTasks = await Promise.all(goal.linkedTasks.map(id => db.getData('tasks', id)));
+                        const validTasks = linkedTasks.filter(Boolean);
+                        const completedTasks = validTasks.filter(t => t.completed).length;
+                        progress = validTasks.length > 0 ? Math.round((completedTasks / validTasks.length) * 100) : 0;
+                    }
+                    if (progress < 100) {
+                        html += `<div class="compact-list-item" style="display:flex;justify-content:space-between;align-items:center;gap:1em;">${goal.title}<span style="color:var(--primary-color);font-weight:600;">${progress}%</span></div>`;
+                    }
+                }
+                if (!html) {
+                    goalsDiv.innerHTML = '<div style="color:var(--success-color);text-align:center;">সব লক্ষ্য সম্পন্ন!</div>';
+                } else {
+                    goalsDiv.innerHTML = html;
+                }
+            }
+        });
+
+        const translations = {
+            en: {
+                dashboard: "Dashboard",
+                goals: "Goals",
+                pomodoro: "Pomodoro",
+                accountability: "Accountability",
+                todos: "Todo List",
+                notes: "Notes",
+                habits: "Habits",
+                analytics: "Analytics",
+                settings: "Settings",
+                // Add more keys as needed for your UI:
+                // Example:
+                // export: "Export",
+                // import: "Import",
+                // allow: "Allow",
+                // ...
+            },
+            bn: {
+                dashboard: "ড্যাশবোর্ড",
+                goals: "লক্ষ্য",
+                pomodoro: "পোমোডোরো",
+                accountability: "দায়িত্ব",
+                todos: "টু-ডু লিস্ট",
+                notes: "নোটস",
+                habits: "অভ্যাস",
+                analytics: "বিশ্লেষণ",
+                settings: "সেটিংস",
+                // Add more keys as needed for your UI:
+                // export: "এক্সপোর্ট করুন",
+                // import: "ইমপোর্ট করুন",
+                // allow: "অনুমতি দিন",
+                // ...
+            }
+        };
+
+        function setLanguage(lang) {
+            localStorage.setItem('appLang', lang);
+            const elements = Array.from(document.querySelectorAll('[data-i18n]'));
+            elements.forEach(el => el.classList.add('lang-fade'));
+            setTimeout(() => {
+                elements.forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    let newText = translations[lang][key];
+                    if (!newText) return; // fallback: keep old text if missing
+                    const icon = el.querySelector('i');
+                    if (icon) {
+                        let next = icon.nextSibling;
+                        while (next) {
+                            let toRemove = next;
+                            next = next.nextSibling;
+                            if (toRemove.nodeType === 3 || (toRemove.nodeType === 1 && toRemove.tagName !== 'I')) {
+                                toRemove.remove();
+                            }
+                        }
+                        icon.insertAdjacentText('afterend', ' ' + newText);
+                    } else {
+                        el.textContent = newText;
+                    }
+                });
+                requestAnimationFrame(() => {
+                    elements.forEach(el => el.classList.remove('lang-fade'));
+                });
+            }, 120);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const langToggle = document.getElementById('language-toggle');
+            let lang = localStorage.getItem('appLang') || 'bn';
+            langToggle.checked = (lang === 'en');
+            setLanguage(lang);
+            langToggle.addEventListener('change', function () {
+                lang = langToggle.checked ? 'en' : 'bn';
+                setLanguage(lang);
+            });
+            // Also update language after tab switch
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    setTimeout(() => setLanguage(lang), 10);
+                });
+            });
+        });
+
+        // Remove old language select logic if present
+        // Add new language toggle logic
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Dark mode toggle sync (header/settings)
+            const themeToggleHeader = document.getElementById('theme-toggle');
+            const themeToggleSettings = document.getElementById('theme-toggle-settings');
+            function syncThemeToggles(checked) {
+                themeToggleHeader.checked = checked;
+                themeToggleSettings.checked = checked;
+            }
+            // Initial sync
+            const isDark = localStorage.getItem('theme') === 'dark';
+            syncThemeToggles(isDark);
+            themeToggleHeader.addEventListener('change', function () {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+                syncThemeToggles(themeToggleHeader.checked);
+            });
+            themeToggleSettings.addEventListener('change', function () {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+                syncThemeToggles(themeToggleSettings.checked);
+            });
+
+            // Language toggle logic (fixed)
+            const langToggle = document.getElementById('language-toggle');
+            // Set initial state from localStorage or default
+            let lang = localStorage.getItem('language') || 'bn';
+            langToggle.checked = (lang === 'en');
+            function updateLanguageUI(language) {
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[language] && translations[language][key]) {
+                        el.innerText = translations[language][key];
+                    }
+                });
+            }
+            updateLanguageUI(lang);
+            langToggle.addEventListener('change', function () {
+                lang = langToggle.checked ? 'en' : 'bn';
+                localStorage.setItem('language', lang);
+                updateLanguageUI(lang);
+            });
+        });
+
+        // Add new i18n keys for Task Manager
+        Object.assign(translations.en, {
+            task_manager: "Task Manager",
+            select_date: "SELECT DATE",
+            select_time: "SELECT TIME",
+            add_task: "Add Task",
+            priority_low: "Low",
+            priority_medium: "Medium",
+            priority_high: "High",
+            sort: "Sort:",
+            sort_newest: "Newest First",
+            sort_priority: "By Priority",
+            sort_due_date: "By Due Date"
+        });
+        Object.assign(translations.bn, {
+            task_manager: "কাজের তালিকা",
+            select_date: "তারিখ দিন",
+            select_time: "সময় দিন",
+            add_task: "কাজ যোগ করুন",
+            priority_low: "কম",
+            priority_medium: "মাঝারি",
+            priority_high: "উচ্চ",
+            sort: "সাজান:",
+            sort_newest: "নতুন আগে",
+            sort_priority: "অগ্রাধিকার",
+            sort_due_date: "তারিখ অনুযায়ী"
+        });
+
+        // Only allow form submit on Add Task button click
+        const taskForm = document.getElementById('task-form');
+        const addTaskBtn = document.getElementById('add-task-btn');
+        if (taskForm && addTaskBtn) {
+            addTaskBtn.onclick = null; // Remove previous handler
+            taskForm.onsubmit = function (e) {
+                e.preventDefault();
+                handleTaskSubmit(e);
+            };
+        }
+
+        // Make input/select box clickable: focus input/select on group click
+        function makeBoxClickable(groupSelector, inputSelector) {
+            document.querySelectorAll(groupSelector).forEach(group => {
+                group.addEventListener('click', function (e) {
+                    // Only focus if not clicking inside an input/select
+                    if (e.target === group) {
+                        const input = group.querySelector(inputSelector);
+                        if (input) input.focus();
+                    }
+                });
+            });
+        }
+        makeBoxClickable('.task-input-meta .input-group', 'input');
+        // Don't make select box clickable, let browser handle it
+        makeBoxClickable('.task-input-meta select', 'select');
+
+        // TickTick Style Todo List Functions
+        let todos = [];
+
+        // Initialize Todo List
+        function initTodoList() {
+            loadTodos();
+            setupTodoEventListeners();
+            updateTodoStats();
+        }
+
+        // Setup Event Listeners
+        function setupTodoEventListeners() {
+            // Quick Add
+            const quickAddBtn = document.getElementById('quick-add-btn');
+            const quickTaskInput = document.getElementById('quick-task-input');
+
+            if (quickAddBtn && quickTaskInput) {
+                quickAddBtn.addEventListener('click', addQuickTask);
+                quickTaskInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        addQuickTask();
+                    }
+                });
+            }
+
+            // Advanced Add
+            const advancedAddBtn = document.getElementById('advanced-add-btn');
+            const advancedForm = document.getElementById('advanced-add-form');
+            const cancelBtn = document.getElementById('cancel-advanced-btn');
+            const saveBtn = document.getElementById('save-advanced-btn');
+
+            if (advancedAddBtn) {
+                advancedAddBtn.addEventListener('click', function () {
+                    advancedForm.style.display = 'block';
+                    document.getElementById('advanced-task-input').focus();
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function () {
+                    advancedForm.style.display = 'none';
+                    document.getElementById('advanced-task-input').value = '';
+                });
+            }
+
+            if (saveBtn) {
+                saveBtn.addEventListener('click', addAdvancedTask);
+            }
+
+            // Filters and Sort
+            const filterSelect = document.getElementById('task-filter');
+            const sortSelect = document.getElementById('task-sort');
+
+            if (filterSelect) {
+                filterSelect.addEventListener('change', renderTodos);
+            }
+
+            if (sortSelect) {
+                sortSelect.addEventListener('change', renderTodos);
+            }
+        }
+
+        // Add Quick Task
+        async function addQuickTask() {
+            const input = document.getElementById('quick-task-input');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const todo = {
+                id: Date.now(),
+                text: text,
+                completed: false,
+                priority: 'medium',
+                dueDate: null,
+                dueTime: null,
+                createdAt: new Date().toISOString()
+            };
+
+            todos.push(todo);
+            await saveTodos();
+            renderTodos();
+            updateTodoStats();
+
+            input.value = '';
+            showToast('কাজ যোগ করা হয়েছে!', 'success');
+        }
+
+        // Add Advanced Task
+        async function addAdvancedTask() {
+            const input = document.getElementById('advanced-task-input');
+            const priority = document.getElementById('task-priority').value;
+            const dueDate = document.getElementById('task-due-date').value;
+            const dueTime = document.getElementById('task-due-time').value;
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const todo = {
+                id: Date.now(),
+                text: text,
+                completed: false,
+                priority: priority,
+                dueDate: dueDate || null,
+                dueTime: dueTime || null,
+                createdAt: new Date().toISOString()
+            };
+
+            todos.push(todo);
+            await saveTodos();
+            renderTodos();
+            updateTodoStats();
+
+            // Reset form
+            input.value = '';
+            document.getElementById('task-due-date').value = '';
+            document.getElementById('task-due-time').value = '';
+            document.getElementById('advanced-add-form').style.display = 'none';
+
+            showToast('কাজ যোগ করা হয়েছে!', 'success');
+        }
+
+        // Toggle Task Completion
+        async function toggleTask(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                saveTodos();
+                renderTodos();
+                updateTodoStats();
+                const message = todo.completed === true ? 'কাজ সম্পূর্ণ হয়েছে!' : 'কাজ অসম্পূর্ণ করা হয়েছে!';
+                showToast(message, 'info');
+            }
+        }
+
+        // Delete Task
+        async function deleteTask(id) {
+            if (confirm('আপনি কি এই কাজটি মুছে ফেলতে চান?')) {
+                todos = todos.filter(t => t.id !== id);
+                await saveTodos();
+                renderTodos();
+                updateTodoStats();
+                showToast('কাজ মুছে ফেলা হয়েছে!', 'warning');
+            }
+        }
+
+        // Edit Task
+        function editTask(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                const newText = prompt('কাজের বিবরণ সম্পাদনা করুন:', todo.text);
+                if (newText !== null && newText.trim() !== '') {
+                    todo.text = newText.trim();
+                    saveTodos();
+                    renderTodos();
+                    showToast('কাজ সম্পাদনা করা হয়েছে!', 'success');
+                }
+            }
+        }
+
+        // Render Todos
+        function renderTodos() {
+            const taskList = document.getElementById('task-list');
+            if (!taskList) return;
+            let filteredTodos = [...todos];
+            // Apply filter
+            const filter = document.getElementById('task-filter')?.value || 'all';
+            if (filter === 'pending') {
+                filteredTodos = filteredTodos.filter(t => !t.completed);
+            } else if (filter === 'completed') {
+                filteredTodos = filteredTodos.filter(t => t.completed);
+            }
+            // Apply sort
+            const sort = document.getElementById('task-sort')?.value || 'created';
+            filteredTodos.sort((a, b) => {
+                if (sort === 'due') {
+                    if (!a.dueDate && !b.dueDate) return 0;
+                    if (!a.dueDate) return 1;
+                    if (!b.dueDate) return -1;
+                    return new Date(a.dueDate) - new Date(b.dueDate);
+                } else if (sort === 'priority') {
+                    const priorityOrder = { high: 3, medium: 2, low: 1 };
+                    return priorityOrder[b.priority] - priorityOrder[a.priority];
+                } else {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                }
+            });
+            // Group by due date string (same as notes)
+            const groups = {};
+            filteredTodos.forEach(todo => {
+                let groupKey = 'No Date';
+                if (todo.dueDate) {
+                    groupKey = formatDateHeading(todo.dueDate);
+                }
+                if (!groups[groupKey]) groups[groupKey] = [];
+                groups[groupKey].push(todo);
+            });
+            // Render
+            let html = '';
+            Object.keys(groups).sort((a, b) => {
+                if (a === 'No Date') return 1;
+                if (b === 'No Date') return -1;
+                return new Date(b) - new Date(a);
+            }).forEach(groupKey => {
+                html += `<li style="font-weight:600; color:var(--primary-color); margin:0.7em 0 0.2em 0; font-size:1.02em; background:none; border:none;">${groupKey}</li>`;
+                html += groups[groupKey].map(todo => `<li class="compact-list-item" data-id="${todo.id}"><span class="item-title task-title-link" style="cursor:pointer;">${todo.text}</span><span class="item-meta">${todo.dueDate ? new Date(todo.dueDate).toLocaleDateString('bn-BD') : ''}</span></li>`).join('');
+            });
+            if (!html) {
+                html = '<li class="compact-list-item" style="justify-content:center; color:var(--text-secondary);">কোন কাজ নেই</li>';
+            }
+            taskList.innerHTML = html;
+            // Add click event for modal
+            taskList.querySelectorAll('.task-title-link').forEach(span => {
+                const li = span.closest('li');
+                const id = li.getAttribute('data-id');
+                const todo = todos.find(t => t.id == id);
+                span.onclick = (e) => { e.stopPropagation(); openTaskDetailModal(todo); };
+            });
+        }
+
+        // Update Statistics
+        function updateTodoStats() {
+            const totalTasks = todos.length;
+            const completedTasks = todos.filter(t => t.completed).length;
+            const pendingTasks = totalTasks - completedTasks;
+
+            const totalElement = document.getElementById('total-tasks');
+            const completedElement = document.getElementById('completed-tasks');
+            const pendingElement = document.getElementById('pending-tasks');
+
+            if (totalElement) totalElement.textContent = totalTasks;
+            if (completedElement) completedElement.textContent = completedTasks;
+            if (pendingElement) pendingElement.textContent = pendingTasks;
+
+            // Update dashboard todo count
+            renderDashboardTodos();
+        }
+
+        // Save Todos to LocalStorage
+        async function saveTodos() {
+            try {
+                localStorage.setItem('todos', JSON.stringify(todos));
+            } catch (error) {
+                console.error('Error saving todos:', error);
+            }
+        }
+
+        // Load Todos from LocalStorage
+        async function loadTodos() {
+            try {
+                const saved = localStorage.getItem('todos');
+                todos = saved ? JSON.parse(saved) : [];
+            } catch (error) {
+                console.error('Error loading todos:', error);
+                todos = [];
+            }
+        }
+
+        // Show Toast Notification
+        function showToast(message, type = 'info') {
+            if (!message || !message.trim()) return; // ফাঁকা হলে কিছুই দেখাবেন না
+            const toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize Todo List when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            initTodoList();
+            initDashboardTodo();
+        });
+
+        // Dashboard Todo Functions
+        function initDashboardTodo() {
+            const dashboardInput = document.getElementById('dashboard-task-input');
+            const dashboardAddBtn = document.getElementById('dashboard-add-btn');
+
+            if (dashboardInput && dashboardAddBtn) {
+                dashboardAddBtn.addEventListener('click', addDashboardTask);
+                dashboardInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        addDashboardTask();
+                    }
+                });
+            }
+
+            renderDashboardTodos();
+        }
+
+        function addDashboardTask() {
+            const input = document.getElementById('dashboard-task-input');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const todo = {
+                id: Date.now(),
+                text: text,
+                completed: false,
+                priority: 'medium',
+                dueDate: null,
+                dueTime: null,
+                createdAt: new Date().toISOString()
+            };
+
+            todos.push(todo);
+            saveTodos();
+            renderTodos();
+            renderDashboardTodos();
+            updateTodoStats();
+
+            input.value = '';
+            showToast('কাজ যোগ করা হয়েছে!', 'success');
+        }
+
+        function renderDashboardTodos() {
+            const dashboardList = document.getElementById('dashboard-task-list');
+            const dashboardCount = document.getElementById('dashboard-todo-count');
+
+            if (!dashboardList || !dashboardCount) return;
+
+            const pendingTodos = todos.filter(t => !t.completed).slice(0, 5);
+
+            if (pendingTodos.length === 0) {
+                dashboardList.innerHTML = `
+                    <div style="text-align: center; color: var(--text-secondary); padding: 1rem; font-size: 0.9rem;">
+                        কোন কাজ নেই
+                    </div>
+                `;
+            } else {
+                dashboardList.innerHTML = pendingTodos.map(todo => `
+                    <div class="dashboard-task-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
+                        <div class="dashboard-task-checkbox ${todo.completed ? 'checked' : ''}" onclick="toggleDashboardTask(${todo.id})">
+                            ${todo.completed ? '<i class="fas fa-check"></i>' : ''}
+                        </div>
+                        <div class="dashboard-task-text">${todo.text}</div>
+                    </div>
+                `).join('');
+            }
+
+            const totalPending = todos.filter(t => !t.completed).length;
+            dashboardCount.textContent = `${totalPending}টি কাজ`;
+        }
+
+        function toggleDashboardTask(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                saveTodos();
+                renderTodos();
+                renderDashboardTodos();
+                updateTodoStats();
+                const message = todo.completed === true ? 'কাজ সম্পূর্ণ হয়েছে!' : 'কাজ অসম্পূর্ণ করা হয়েছে!';
+                showToast(message, 'info');
+            }
+        }
+
+        // Tab switching function
+        function switchToTab(tabName) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Fix theme toggle null error
+        function syncThemeToggles(checked) {
+            const themeToggleHeader = document.getElementById('theme-toggle');
+            const themeToggleSettings = document.getElementById('theme-toggle-settings');
+            if (themeToggleHeader) themeToggleHeader.checked = checked;
+            if (themeToggleSettings) themeToggleSettings.checked = checked;
+        }
+
+        // Fix loadPomodoro not defined error
+        async function loadPomodoro() {
+            // Pomodoro tab already renders timer, so just update display if needed
+            if (typeof updateTimerDisplay === 'function') updateTimerDisplay();
+        }
+
+        // Improve checkbox rendering for TickTick style
+        // Ensure .task-checkbox and .dashboard-task-checkbox show checkmark when checked
+        // (CSS already present, but ensure HTML uses correct classes and <i> icon)
+
+        // Info card: if empty, show a default message
+        const infoCard = document.querySelector('.info-card');
+        if (infoCard && !infoCard.textContent.trim()) {
+            infoCard.innerHTML = '<i class="fas fa-info-circle"></i> তথ্য নেই';
+        }
+
+        // --- Task Completion Rate Chart ---
+        async function renderTaskCompletionChart() {
+            if (window.taskCompletionChart) {
+                window.taskCompletionChart.destroy();
+            }
+            // ডামি ডেটা
+            const completed = 3;
+            const pending = 2;
+            const canvas = document.getElementById('task-completion-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.taskCompletionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['সম্পন্ন', 'বাকি'],
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ['#28a745', '#ffc107'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' } }
+                    }
+                }
+            });
+        }
+        function setupAnalyticsTab() {
+            const analyticsTab = document.querySelector('[data-tab="analytics"]');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', renderTaskCompletionChart);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', setupAnalyticsTab);
+
+        // --- Study Hours Chart ---
+        async function renderStudyHoursChart() {
+            if (window.studyHoursChart) {
+                window.studyHoursChart.destroy();
+            }
+            // ডামি ডেটা
+            const labels = ['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'];
+            const data = [2, 3, 1, 4, 2, 0, 3];
+            const canvas = document.getElementById('study-hours-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.studyHoursChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'ঘণ্টা',
+                        data: data,
+                        backgroundColor: '#2196f3',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? '#3e4042' : '#ced0d4' }
+                        },
+                        x: {
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        // Render Study Hours chart when analytics tab is shown
+        function setupAnalyticsTab() {
+            const analyticsTab = document.querySelector('[data-tab="analytics"]');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', () => {
+                    renderTaskCompletionChart();
+                    renderStudyHoursChart();
+                });
+            }
+        }
+
+        // --- Focus Level Chart ---
+        async function renderFocusLevelChart() {
+            if (window.focusLevelChart) {
+                window.focusLevelChart.destroy();
+            }
+            // ডামি ডেটা
+            const labels = ['দুর্বল', 'মাঝারি', 'দুর্দান্ত'];
+            const data = [2, 4, 3];
+            const canvas = document.getElementById('focus-level-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.focusLevelChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#f44336', '#ffc107', '#28a745'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' } }
+                    }
+                }
+            });
+        }
+        // Render Focus Level chart when analytics tab is shown
+        function setupAnalyticsTab() {
+            const analyticsTab = document.querySelector('[data-tab="analytics"]');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', () => {
+                    renderTaskCompletionChart();
+                    renderStudyHoursChart();
+                    renderFocusLevelChart();
+                });
+            }
+        }
+
+        // --- Mood Distribution Chart ---
+        async function renderMoodChart() {
+            if (window.moodChart) {
+                window.moodChart.destroy();
+            }
+            // ডামি ডেটা
+            const labels = ['খুশি', 'শান্ত', 'দুঃখিত', 'রাগান্বিত', 'প্রোডাক্টিভ'];
+            const data = [2, 3, 1, 2, 4];
+            const canvas = document.getElementById('mood-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.moodChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#4caf50', // খুশি
+                            '#00bcd4', // শান্ত
+                            '#f44336', // দুঃখিত
+                            '#ff9800', // রাগান্বিত
+                            '#9c27b0'  // প্রোডাক্টিভ
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' } },
+                        tooltip: { backgroundColor: '#fff', titleColor: '#222', bodyColor: '#222', borderColor: '#28a745', borderWidth: 1 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: document.body.classList.contains('dark-mode') ? '#3e4042' : '#ced0d4' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? '#3e4042' : '#ced0d4' },
+                            pointLabels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' }
+                        }
+                    }
+                }
+            });
+        }
+        // Render Mood chart when analytics tab is shown
+        function setupAnalyticsTab() {
+            const analyticsTab = document.querySelector('[data-tab="analytics"]');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', () => {
+                    renderTaskCompletionChart();
+                    renderStudyHoursChart();
+                    renderFocusLevelChart();
+                    renderMoodChart();
+                });
+            }
+        }
+
+        function getTodos() {
+            try {
+                const saved = localStorage.getItem('todos');
+                return saved ? JSON.parse(saved) : [];
+            } catch (e) { return []; }
+        }
+        function getReports() {
+            try {
+                const saved = localStorage.getItem('dailyReports');
+                return saved ? JSON.parse(saved) : [];
+            } catch (e) { return []; }
+        }
+        function filterReportsByRange(reports, range) {
+            if (!Array.isArray(reports)) return [];
+            if (range === 'month') {
+                // শেষ ৩০ দিন
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - 29);
+                return reports.filter(r => r.date && new Date(r.date) >= cutoff);
+            } else {
+                // শেষ ৭ দিন
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - 6);
+                return reports.filter(r => r.date && new Date(r.date) >= cutoff);
+            }
+        }
+        async function renderTaskCompletionChart() {
+            if (window.taskCompletionChart) window.taskCompletionChart.destroy();
+            const todos = getTodos();
+            const completed = todos.filter(t => t.completed).length;
+            const pending = todos.length - completed;
+            const canvas = document.getElementById('task-completion-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.taskCompletionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['সম্পন্ন', 'বাকি'],
+                    datasets: [{
+                        data: [completed, pending],
+                        backgroundColor: ['#28a745', '#ffc107'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' } },
+                        tooltip: { backgroundColor: '#fff', titleColor: '#222', bodyColor: '#222', borderColor: '#28a745', borderWidth: 1 }
+                    }
+                }
+            });
+        }
+        async function renderStudyHoursChart(range) {
+            if (window.studyHoursChart) window.studyHoursChart.destroy();
+            let reports = getReports();
+            reports = filterReportsByRange(reports, range);
+            // সর্বশেষ N দিনের ডেটা
+            const labels = reports.map(r => r.date || '').map(d => d ? new Date(d).toLocaleDateString('bn-BD', { weekday: 'short', day: 'numeric' }) : '');
+            const data = reports.map(r => parseFloat(r.study_hours) || 0);
+            const canvas = document.getElementById('study-hours-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.studyHoursChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'ঘণ্টা',
+                        data: data,
+                        backgroundColor: 'linear-gradient(90deg, #2196f3 60%, #00e5ff 100%)',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#fff', titleColor: '#222', bodyColor: '#222', borderColor: '#2196f3', borderWidth: 1 }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? '#3e4042' : '#ced0d4' }
+                        },
+                        x: {
+                            ticks: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+        async function renderFocusLevelChart(range) {
+            if (window.focusLevelChart) window.focusLevelChart.destroy();
+            let reports = getReports();
+            reports = filterReportsByRange(reports, range);
+            const focusData = { 'দুর্বল': 0, 'মাঝারি': 0, 'দুর্দান্ত': 0 };
+            reports.forEach(r => { if (focusData.hasOwnProperty(r.focus_level)) focusData[r.focus_level]++; });
+            const canvas = document.getElementById('focus-level-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.focusLevelChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(focusData),
+                    datasets: [{
+                        data: Object.values(focusData),
+                        backgroundColor: ['#f44336', '#ffc107', '#28a745'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' } },
+                        tooltip: { backgroundColor: '#fff', titleColor: '#222', bodyColor: '#222', borderColor: '#28a745', borderWidth: 1 }
+                    }
+                }
+            });
+        }
+        async function renderMoodChart(range) {
+            if (window.moodChart) window.moodChart.destroy();
+            let reports = getReports();
+            reports = filterReportsByRange(reports, range);
+            const moodData = { 'খুশি': 0, 'শান্ত': 0, 'দুঃখিত': 0, 'রাগান্বিত': 0, 'প্রোডাক্টিভ': 0 };
+            reports.forEach(r => { if (moodData.hasOwnProperty(r.mood)) moodData[r.mood]++; });
+            const canvas = document.getElementById('mood-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            window.moodChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: Object.keys(moodData),
+                    datasets: [{
+                        data: Object.values(moodData),
+                        backgroundColor: [
+                            '#4caf50', // খুশি
+                            '#00bcd4', // শান্ত
+                            '#f44336', // দুঃখিত
+                            '#ff9800', // রাগান্বিত
+                            '#9c27b0'  // প্রোডাক্টিভ
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { labels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' } },
+                        tooltip: { backgroundColor: '#fff', titleColor: '#222', bodyColor: '#222', borderColor: '#00bcd4', borderWidth: 1 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: document.body.classList.contains('dark-mode') ? '#3e4042' : '#ced0d4' },
+                            grid: { color: document.body.classList.contains('dark-mode') ? '#3e4042' : '#ced0d4' },
+                            pointLabels: { color: document.body.classList.contains('dark-mode') ? '#e4e6eb' : '#1c1e21' }
+                        }
+                    }
+                }
+            });
+        }
+        function renderAllAnalyticsCharts() {
+            const range = document.getElementById('analytics-range')?.value || 'week';
+            renderTaskCompletionChart();
+            renderStudyHoursChart(range);
+            renderFocusLevelChart(range);
+            renderMoodChart(range);
+        }
+        function setupAnalyticsTab() {
+            const analyticsTab = document.querySelector('[data-tab="analytics"]');
+            if (analyticsTab) {
+                analyticsTab.addEventListener('click', renderAllAnalyticsCharts);
+            }
+            const rangeSelect = document.getElementById('analytics-range');
+            if (rangeSelect) {
+                rangeSelect.addEventListener('change', renderAllAnalyticsCharts);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', setupAnalyticsTab);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // ... existing code ...
+            const dashboardTitle = document.getElementById('dashboard-title');
+            if (dashboardTitle) {
+                dashboardTitle.addEventListener('click', function () {
+                    switchToTab('dashboard');
+                });
+            }
+        });
+
+        // ... existing code ...
+        function openTaskDetailModal(todo) {
+            const modal = document.getElementById('task-modal');
+            document.getElementById('task-modal-title').textContent = todo.text;
+            let html = '';
+            html += `<div style='margin-bottom:0.7rem;'><b>অগ্রাধিকার:</b> ${todo.priority === 'high' ? 'উচ্চ' : todo.priority === 'medium' ? 'মাঝারি' : 'কম'}</div>`;
+            if (todo.dueDate) html += `<div style='margin-bottom:0.7rem;'><b>শেষ তারিখ:</b> ${new Date(todo.dueDate).toLocaleDateString('bn-BD')}</div>`;
+            if (todo.dueTime) html += `<div style='margin-bottom:0.7rem;'><b>সময়:</b> ${todo.dueTime}</div>`;
+            html += `<div style='margin-bottom:0.7rem;'><b>স্ট্যাটাস:</b> ${todo.completed ? 'সম্পূর্ণ' : 'অসম্পূর্ণ'}</div>`;
+            html += `<div style='margin-bottom:0.7rem;'><b>তৈরির তারিখ:</b> ${todo.createdAt ? new Date(todo.createdAt).toLocaleString('bn-BD') : ''}</div>`;
+            document.getElementById('task-modal-body').innerHTML = html;
+            modal.style.display = 'block';
+            // Edit/Delete actions
+            document.getElementById('edit-task-btn').onclick = () => editTask(todo.id);
+            document.getElementById('delete-task-btn').onclick = () => deleteTask(todo.id);
+        }
+        document.getElementById('close-task-modal').onclick = function () {
+            document.getElementById('task-modal').style.display = 'none';
+        };
+        window.onclick = function (event) {
+            const modal = document.getElementById('task-modal');
+            if (event.target === modal) modal.style.display = 'none';
+        };
+        // ... existing code ...
+        function renderTodos() {
+            const taskList = document.getElementById('task-list');
+            if (!taskList) return;
+            let filteredTodos = [...todos];
+            // Apply filter
+            const filter = document.getElementById('task-filter')?.value || 'all';
+            if (filter === 'pending') {
+                filteredTodos = filteredTodos.filter(t => !t.completed);
+            } else if (filter === 'completed') {
+                filteredTodos = filteredTodos.filter(t => t.completed);
+            }
+            // Apply sort
+            const sort = document.getElementById('task-sort')?.value || 'created';
+            filteredTodos.sort((a, b) => {
+                if (sort === 'due') {
+                    if (!a.dueDate && !b.dueDate) return 0;
+                    if (!a.dueDate) return 1;
+                    if (!b.dueDate) return -1;
+                    return new Date(a.dueDate) - new Date(b.dueDate);
+                } else if (sort === 'priority') {
+                    const priorityOrder = { high: 3, medium: 2, low: 1 };
+                    return priorityOrder[b.priority] - priorityOrder[a.priority];
+                } else {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                }
+            });
+            // Group by due date string (same as notes)
+            const groups = {};
+            filteredTodos.forEach(todo => {
+                let groupKey = 'No Date';
+                if (todo.dueDate) {
+                    groupKey = formatDateHeading(todo.dueDate);
+                }
+                if (!groups[groupKey]) groups[groupKey] = [];
+                groups[groupKey].push(todo);
+            });
+            // Render
+            let html = '';
+            Object.keys(groups).sort((a, b) => {
+                if (a === 'No Date') return 1;
+                if (b === 'No Date') return -1;
+                return new Date(b) - new Date(a);
+            }).forEach(groupKey => {
+                html += `<li style="font-weight:600; color:var(--primary-color); margin:0.7em 0 0.2em 0; font-size:1.02em; background:none; border:none;">${groupKey}</li>`;
+                html += groups[groupKey].map(todo => `<li class="compact-list-item" data-id="${todo.id}"><span class="item-title task-title-link" style="cursor:pointer;">${todo.text}</span><span class="item-meta">${todo.dueDate ? new Date(todo.dueDate).toLocaleDateString('bn-BD') : ''}</span></li>`).join('');
+            });
+            if (!html) {
+                html = '<li class="compact-list-item" style="justify-content:center; color:var(--text-secondary);">কোন কাজ নেই</li>';
+            }
+            taskList.innerHTML = html;
+            // Add click event for modal
+            taskList.querySelectorAll('.task-title-link').forEach(span => {
+                const li = span.closest('li');
+                const id = li.getAttribute('data-id');
+                const todo = todos.find(t => t.id == id);
+                span.onclick = (e) => { e.stopPropagation(); openTaskDetailModal(todo); };
+            });
+        }
+        // ... existing code ...
+
+        // Add this utility function at the top of the script
+        function formatDateHeading(date) {
+            if (!date) return '';
+            return new Date(date).toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+        }
+    </script>
+</body>
+
+</html>
